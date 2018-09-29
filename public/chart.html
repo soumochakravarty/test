@@ -1,0 +1,152 @@
+<html> 
+  <head>
+    <title>Hotel Token</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    // Load the Visualization API and the piechart package.
+    google.charts.load('current', {'packages':['corechart']});
+    
+     // Draw the pie chart for Waiter.
+     google.charts.setOnLoadCallback(drawWaiterChart);
+
+    // Draw the pie chart for Reason.
+     google.charts.setOnLoadCallback(drawReasonChart);
+
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(function () {
+      
+    function drawChart() {
+      var jsonData = $.ajax({
+          //url: "http://localhost:3000/api/hoteltoken",
+          url: "http://192.168.86.34:3000/api/hoteltoken",
+          dataType: "json",
+          async: false
+          }).responseText;
+     //document.write(jsonData);
+      // Create our data table out of JSON data loaded from server.
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      var options = {'title':'Wait Time Dashboard:',
+                      
+                     //'width':700,
+                      //'height':400,
+                    //chartArea:{height:'80%'},
+                     hAxis:{title:'Tables'}, 
+                     vAxis: {
+                        //title:'Time',
+                        //viewWindowMode: 'explicit',
+                        viewWindow: {
+                            max: 15 }} ,
+                     legend: { position: "none" },
+                     bar: { groupWidth: '10' },
+                         
+                     //bars: 'horizontal',
+                     isStacked: true
+
+                     };
+
+      chart.draw(data, options);
+             
+      setTimeout(drawChart,10000);
+    }
+    drawChart();
+    
+});
+
+function drawWaiterChart() {
+  var jsonData = $.ajax({
+          //url: "http://localhost:3000/api/waiter",
+          url: "http://192.168.86.34:3000/api/waiter",
+          dataType: "json",
+          async: false
+          }).responseText;
+     //document.write(jsonData);
+      // Create our data table out of JSON data loaded from server.
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.PieChart(document.getElementById('chart_waiter_div'));
+      var waiterchart_options = {title:'How Many Tables assigned to a Waiter',
+                       //width:400,
+                       //height:300,
+                       legend: 'none'}; 
+      chart.draw(data, waiterchart_options);
+     setTimeout(drawWaiterChart,10000);
+
+}
+
+function drawReasonChart() {
+  var jsonData = $.ajax({
+          //url: "http://localhost:3000/api/request",
+          url: "http://192.168.86.34:3000/api/request",
+          dataType: "json",
+          async: false
+          }).responseText;
+     //document.write(jsonData);
+      // Create our data table out of JSON data loaded from server.
+      
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.PieChart(document.getElementById('chart_request_div'));
+      var waiterchart_options = {title:'Request Metric: ',
+                       //width:400,
+                       //height:300,
+                       legend: 'none'};
+      chart.draw(data, waiterchart_options);
+     setTimeout(drawReasonChart,10000);
+
+}
+    </script>
+  <style type="text/css">
+  .link {
+    width: 50%;
+    height: 50%;
+    float: left;
+    text-align: center;
+}
+.chartwrapper {
+  width: 80%;
+  position: relative;
+  padding-bottom: 50%;
+  box-sizing: border-box;
+}
+
+.chartdiv {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+  </style>
+  
+</head>
+
+  <body>
+    <center>  
+        <div class="w3-container w3-blue">
+                <h1>Hotel Token </h1> 
+                <p></p> 
+        </div>
+    
+    <!--Div that will hold the pie chart-->
+  </center>
+    <!--<div id="chart_div"></div>-->
+    <div class="chartwrapper">
+        <div id="chart_div" class="chartdiv"></div>
+      </div>
+
+    <tr>
+        <td><div class="link" id="chart_waiter_div" style="border: 1px solid #ccc"></div></td>
+        <td><div class="link" id="chart_request_div" style="border: 1px solid #ccc" ></div></td>
+      </tr>
+    
+  </body>
+</html>
