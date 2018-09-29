@@ -23,8 +23,7 @@
       
     function drawChart() {
       var jsonData = $.ajax({
-          //url: "http://localhost:3000/api/hoteltoken",
-          url: "http://192.168.86.34:3000/api/hoteltoken",
+          url: "/api/hoteltoken",
           dataType: "json",
           async: false
           }).responseText;
@@ -63,8 +62,7 @@
 
 function drawWaiterChart() {
   var jsonData = $.ajax({
-          //url: "http://localhost:3000/api/waiter",
-          url: "http://192.168.86.34:3000/api/waiter",
+          url: "/api/waiter",
           dataType: "json",
           async: false
           }).responseText;
@@ -85,8 +83,7 @@ function drawWaiterChart() {
 
 function drawReasonChart() {
   var jsonData = $.ajax({
-          //url: "http://localhost:3000/api/request",
-          url: "http://192.168.86.34:3000/api/request",
+          url: "/api/request",
           dataType: "json",
           async: false
           }).responseText;
