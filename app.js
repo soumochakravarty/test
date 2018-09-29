@@ -1,9 +1,10 @@
+require('./connection/config');
 var express = require('express');
 var app = express();
 var mysql = require('mysql');
 var apiController = require('./controllers/apiController');
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT;
 
 app.use('/', express.static(__dirname + '/public'));
 
