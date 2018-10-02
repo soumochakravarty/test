@@ -1,4 +1,4 @@
-var Hoteltoken = require('../connection/hoteltokenCon');
+var Hoteltoken = require('../config/hoteltokenCon');
 var bodyParser = require('body-parser');
 var parser = require('json-parser');
 
