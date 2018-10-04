@@ -1,0 +1,25 @@
+<nav class="blue darken-3">
+  <div class="container">
+    <div class="nav-wrapper">
+      <a href="/" class="brand-logo center">Call System</a>
+      {{#if session.email}}
+       <a href="#" data-activates="main-menu" class="button-collapse show-on-large"><i class="fa fa-bars"></i></a>
+      {{/if}}
+      <!-- RIGHT NAV -->
+      <ul class="right hide-on-small-only">
+        {{#if session.email}}
+       
+        <li><a href="/dashboard">Welcome to {{session.restaurant}}</a></li>
+        <li><a href="/users/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+        {{/if}}
+      </ul>
+      <!-- SIDE MENU -->
+      <ul class="side-nav" id="main-menu">
+        <li class="divider"></li>
+        <li><a href="/dashboard"><i class="fa fa-cog"></i> Setup Waiter </a></li>
+        <li><a href="/stories/my"><i class="fa fa-user"></i> Analysis </a></li>
+        <li><a href="/users/logout"><i class="fa fa-sign-out"></i> Logout </a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

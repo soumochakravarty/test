@@ -1,0 +1,119 @@
+<html> 
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    // Load the Visualization API and the piechart package.
+    google.charts.load('current', {'packages':['corechart']});
+    
+     // Draw the pie chart for Waiter.
+     google.charts.setOnLoadCallback(drawWaiterChart);
+
+    // Draw the pie chart for Reason.
+     google.charts.setOnLoadCallback(drawReasonChart);
+
+
+    // Draw the Bar chart for Wait time
+    google.charts.setOnLoadCallback(function () {
+      
+    function drawChart() {
+      var jsonData = $.ajax({
+          url: "/api/hoteltoken",
+          dataType: "json",
+          async: false
+          }).responseText;
+     //document.write(jsonData);
+      // Create our data table out of JSON data loaded from server.
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      var options = {'title':'Wait Time Dashboard:',
+                      
+                     //'width':700,
+                      //'height':400,
+                    //chartArea:{height:'80%'},
+                     hAxis:{title:'Tables'}, 
+                     vAxis: {
+                        //title:'Time',
+                        //viewWindowMode: 'explicit',
+                        viewWindow: {
+                            max: 15 }} ,
+                     legend: { position: "none" },
+                     bar: { groupWidth: '10' },
+                         
+                     //bars: 'horizontal',
+                     isStacked: true
+
+                     };
+
+      chart.draw(data, options);
+             
+      setTimeout(drawChart,10000);
+    }
+    drawChart();
+    
+});
+
+function drawWaiterChart() {
+  var jsonData = $.ajax({
+          url: "/api/waiter",
+          dataType: "json",
+          async: false
+          }).responseText;
+     //document.write(jsonData);
+      // Create our data table out of JSON data loaded from server.
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.PieChart(document.getElementById('chart_waiter_div'));
+      var waiterchart_options = {title:'Open Call Distribution:',
+                       //width:400,
+                       //height:300,
+                       legend: 'none'}; 
+      chart.draw(data, waiterchart_options);
+     setTimeout(drawWaiterChart,10000);
+
+}
+
+function drawReasonChart() {
+  var jsonData = $.ajax({
+          url: "/api/request",
+          dataType: "json",
+          async: false
+          }).responseText;
+     //document.write(jsonData);
+      // Create our data table out of JSON data loaded from server.
+      
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.PieChart(document.getElementById('chart_request_div'));
+      var waiterchart_options = {title:'Service Type Distribution:',
+                       //width:400,
+                       //height:300,
+                       legend: 'none'};
+      chart.draw(data, waiterchart_options);
+     setTimeout(drawReasonChart,10000);
+
+}
+    </script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <!--<div id="chart_div"></div>-->
+    <div class="chartwrapper">
+        <div id="chart_div" class="chartdiv"></div>
+      </div>
+
+ 
+        <div class="link" id="chart_waiter_div" ></div></td>
+        
+        <div class="link" id="chart_request_div" ></div></td>
+
+    
+  </body>
+</html>

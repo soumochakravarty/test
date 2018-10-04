@@ -1,6 +1,8 @@
 var Hoteltoken = require('../config/hoteltokenCon');
 var bodyParser = require('body-parser');
 var parser = require('json-parser');
+var path = require('path');
+var {authenticate} = require('../middleware/authenticate');
 
 module.exports = function(app) {
     
@@ -22,11 +24,11 @@ if (length === 0 ){
 }
 for(var i=0;i<length;i++){
 dif_min=  Math.round(Math.abs((new Date()- new Date(rows[i].start_time)) / 60000 ));
-temp_waiter="Waiter: "+ rows[i].waiter + " Waite time: " + dif_min;
-if (dif_min <=5 ){
+temp_waiter=rows[i].waiter + " " + dif_min +" min";
+if (dif_min <=2 ){
 res_data = res_data + '{"c":[{"v":"Table ' + rows[i].tid + '","f":null},{"v":'+ dif_min + ',"f":null}, {"v":"green","f":null},{"v":"'+temp_waiter+'","f":null} ]}, ';
 }
-else if (dif_min>5 && dif_min <=10){
+else if (dif_min>2 && dif_min <=6){
     res_data = res_data + '{"c":[{"v":"Table ' + rows[i].tid + '","f":null},{"v":'+ dif_min + ',"f":null}, {"v":"yellow","f":null},{"v":"'+temp_waiter+'","f":null} ]}, ';
 }
 else{
@@ -55,7 +57,7 @@ app.get('/api/waiter', function(req,res) {
         res_data = res_data + '{"c":[{"v":" ","f":null},{"v":0,"f":null} ]}, ';
     }
     for(var i=0;i<length;i++){
-    res_data = res_data + '{"c":[{"v":"Waiter ' + rows[i].waiter + '","f":null},{"v":'+ rows[i].tables + ',"f":null} ]}, ';
+    res_data = res_data + '{"c":[{"v":"' + rows[i].waiter + '","f":null},{"v":'+ rows[i].tables + ',"f":null} ]}, ';
     }
     var res_data_fin = res_data.substring(0, res_data.length-2);
     res_data_fin = res_data_fin + '] }';
@@ -78,7 +80,7 @@ app.get('/api/request', function(req,res) {
         res_data = res_data + '{"c":[{"v":" ","f":null},{"v":0,"f":null} ]}, ';
     }
     for(var i=0;i<length;i++){
-    res_data = res_data + '{"c":[{"v":"Request ' + rows[i].request + '","f":null},{"v":'+ rows[i].number + ',"f":null} ]}, ';
+    res_data = res_data + '{"c":[{"v":"' + rows[i].request + '","f":null},{"v":'+ rows[i].number + ',"f":null} ]}, ';
     }
     var res_data_fin = res_data.substring(0, res_data.length-2);
     res_data_fin = res_data_fin + '] }';
@@ -87,5 +89,8 @@ app.get('/api/request', function(req,res) {
         }
     );        
         });
+        app.get('/welcome', function(req,res) {
+           res.sendStatus(404);
 
+        });
 }
