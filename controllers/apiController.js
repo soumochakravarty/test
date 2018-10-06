@@ -10,8 +10,8 @@ module.exports = function(app) {
     app.use(bodyParser.urlencoded({ extended: true }));
 
     app.get('/api/hoteltoken', function(req,res) {
-
-Hoteltoken.query("SELECT tid, waiter, request, start_time FROM `Hoteltoken` WHERE request !='CANCEL' ORDER BY start_time limit 10",
+    sess=req.session;
+Hoteltoken.query("SELECT tid, waiter, request, start_time FROM `Hoteltoken` WHERE request !='CANCEL' and restaurant='"+sess.restaurant+"' ORDER BY start_time limit 10",
 //Hoteltoken.query("SELECT tid, waiter, request, start_time FROM `tb3` WHERE request !='CANCEL' ORDER BY start_time limit 10",
         function(err, rows) {
             if(err) throw err;
@@ -46,8 +46,8 @@ res_data_fin = res_data_fin + '], "p":null }';
 
 //Waiter 
 app.get('/api/waiter', function(req,res) {
-
-    Hoteltoken.query("SELECT waiter, count(*) as tables FROM `Hoteltoken` WHERE request !='CANCEL' group by (waiter)",
+    sess=req.session;
+    Hoteltoken.query("SELECT waiter, count(*) as tables FROM `Hoteltoken` WHERE request !='CANCEL' and restaurant='"+sess.restaurant+"' group by (waiter)",
     //Hoteltoken.query("SELECT waiter, count(*) as tables FROM `tb3` WHERE request !='CANCEL' group by (waiter)",
             function(err, rows) {
                 if(err) throw err;
@@ -68,8 +68,8 @@ app.get('/api/waiter', function(req,res) {
 
 //Reason 
 app.get('/api/request', function(req,res) {
-
-    Hoteltoken.query("SELECT request, count(*) as number FROM `Hoteltoken` WHERE request !='CANCEL' group by (request)",
+    sess=req.session;
+    Hoteltoken.query("SELECT request, count(*) as number FROM `Hoteltoken` WHERE request !='CANCEL' and restaurant='"+sess.restaurant+"' group by (request)",
     //Hoteltoken.query("SELECT request, count(*) as number FROM `tb3` WHERE request !='CANCEL' group by (request)",
     
             function(err, rows) {
@@ -89,8 +89,15 @@ app.get('/api/request', function(req,res) {
         }
     );        
         });
-        app.get('/welcome', function(req,res) {
-           res.sendStatus(404);
-
-        });
+    app.post('/api/waiter/update', function(req, res) {
+            sess=req.session;
+            for(var table in req.body){
+                var table_no= table.substring(6, table.length);
+        Hoteltoken.query("UPDATE `Hoteltoken` SET `waiter`='"+req.body[table]+"' where tid="+table_no+" and restaurant='"+sess.restaurant+"'",
+        function(err, rows) {
+            if(err) throw err;
+    });
+    }
+        res.redirect('/thankyou');
+              });
 }

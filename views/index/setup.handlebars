@@ -1,0 +1,16 @@
+<h1>Setup</h1>
+<div class="row">
+  <form action="/api/waiter/update" method="post" class="col s12">
+{{#each table}}
+    <div class="row">
+    <div class="input-field" >
+        <input type="text" name="{{this}}">
+        <label for="{{this}}">{{this}}</label>
+      </div>
+    </div>  
+{{/each}}
+    <input type="submit" value="Submit" class="btn">
+  </form>
+</div>
+  </body>
+</html>
