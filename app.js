@@ -14,11 +14,21 @@ app.use(session({secret: process.env.JWT_SECRET,resave: true,
   saveUninitialized: true}));
 // Load Routes
 const index = require('./routes/index');
+// Handlebars Helpers
+const {
+  equal
+} = require('./helper/hbs');
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
+  helpers: {
+    equal: equal
+  },
   defaultLayout:'main'
 }));
+
+
+
 app.set('view engine', 'handlebars');
 
 apiController(app);

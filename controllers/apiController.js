@@ -93,11 +93,13 @@ app.get('/api/request', function(req,res) {
             sess=req.session;
             for(var table in req.body){
                 var table_no= table.substring(6, table.length);
+        if (req.body[table])
         Hoteltoken.query("UPDATE `Hoteltoken` SET `waiter`='"+req.body[table]+"' where tid="+table_no+" and restaurant='"+sess.restaurant+"'",
         function(err, rows) {
             if(err) throw err;
     });
     }
-        res.redirect('/thankyou');
+      res.redirect('/thankyou');
+        
               });
 }

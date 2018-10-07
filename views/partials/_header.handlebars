@@ -8,17 +8,30 @@
       <!-- RIGHT NAV -->
       <ul class="right hide-on-small-only">
         {{#if session.email}}
-       
+       {{#if (equal session.email "admin@admin.com")}}
+        <li><a href="/userdetail">Welcome Admin</a></li>
+        {{else}}
         <li><a href="/dashboard">Welcome to {{session.restaurant}}</a></li>
+        {{/if}}
         <li><a href="/users/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
         {{/if}}
       </ul>
       <!-- SIDE MENU -->
       <ul class="side-nav" id="main-menu">
         <li class="divider"></li>
-        <li><a href="/setup"><i class="fa fa-cog"></i> Setup Waiter </a></li>
-        <li><a href="/stories/my"><i class="fa fa-user"></i> Analysis </a></li>
+        {{#if (equal session.email "admin@admin.com")}}
+    
+        <li><a href="/createuser"><i class="fa fa-cogs"></i> Creat User </a></li>
+        <li><a href="/restpwd"><i class="fa fa-repeat"></i> Reset Password </a></li>
+        <li><a href="/deluser"> <i class="fa fa-trash-o"></i>  Delete User </a></li>
+        <li><a href="/deluser"> <i class="fa fa-plus-square"></i>  Add Table </a></li>
         <li><a href="/users/logout"><i class="fa fa-sign-out"></i> Logout </a></li>
+        {{else}}
+        <li><a href="/dashboard"> <i class="fa fa-bar-chart"></i>  Dashboard </a></li>
+        <li><a href="/setup"><i class="fa fa-cog"></i> Setup Tables </a></li>
+        <li><a href="/stories/my"><i class="fa fa-history"></i> History Data </a></li>
+        <li><a href="/users/logout"><i class="fa fa-sign-out"></i> Logout </a></li>
+        {{/if}}
       </ul>
     </div>
   </div>

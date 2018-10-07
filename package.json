@@ -15,6 +15,7 @@
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
+    "handlebars-helper-equal": "^1.0.0",
     "json-parser": "^1.1.5",
     "jsonwebtoken": "^8.3.0",
     "mysql": "^2.16.0",
