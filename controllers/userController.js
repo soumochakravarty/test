@@ -5,6 +5,8 @@ var User = require('../config/hoteltokenCon');
 var User1 = require('../config/hoteltokenCon');
 var Hoteltoken = require('../config/hoteltokenCon');
 var Hoteltoken1 = require('../config/hoteltokenCon');
+var Hoteltoken2 = require('../config/hoteltokenCon');
+var Hoteltoken3 = require('../config/hoteltokenCon');
 var bodyParser = require('body-parser');
 var parser = require('json-parser');
 var {authenticate} = require('../middleware/authenticate');
@@ -48,19 +50,21 @@ module.exports = function(app) {
                       if(err) throw err;
                       if (rows.length == 0)  
                       {
-                      console.log(body.table);
+                    
                       for( var i = 1 ; i <= body.table ; i++){
                         Hoteltoken1.query("INSERT INTO `Hoteltoken` (`tid`, `restaurant`, `waiter`, `request`, `start_time`) VALUES ('"+i+"', '"+body.restaurant+"', '', 'CANCEL', '');",
                         function(err, rows) {
                           if(err) throw err;
                         });
                       }
-                        Hoteltoken1.query("SELECT max(restaurantid) as restaurantid, max(buttonid) as buttonid FROM `device_lookup;",
+                      
+                        Hoteltoken2.query("SELECT max(restaurantid) as restaurantid, max(buttonid) as buttonid FROM `device_lookup;",
                         function(err, rows) {
                           if(err) throw err;
-                        });
+                        
                         var resid_tmp;
                         var btid_tmp;
+                        
                         if (rows.length == 0){
                           resid_tmp=1;
                           btid_tmp=1;
@@ -69,23 +73,26 @@ module.exports = function(app) {
                           resid_tmp=rows[0].restaurantid + 1;
                           btid_tmp=rows[0].buttonid + 1 ;
                         }
+                        for( var i = 1 ; i <= body.table ; i++){
                         for( var j = 1 ; j <= 4 ; j++){
                           var req_tmp;
-                          if (j=1)
+                          if ( j == 1)
                           req_tmp='Drink';
-                          else if(j=2)
+                          else if( j == 2)
                           req_tmp='Call';
-                          else if(j=3)
+                          else if( j == 3)
                           req_tmp='Bill';
                           else 
                           req_tmp='CANCEL';
-                          for( var i = 1 ; i <= body.table ; i++){
-                            Hoteltoken1.query("INSERT INTO `device_lookup` (`restaurantid`, `buttonid`, `request`, `restaurant`, `tid`) VALUES ("+resid_tmp+", "+btid_tmp+", '"+req_tmp+"', '"+body.restaurant+"', "+i+");",
+                            Hoteltoken3.query("INSERT INTO `device_lookup` (`restaurantid`, `buttonid`, `request`, `restaurant`, `tid`) VALUES ("+resid_tmp+", "+btid_tmp+", '"+req_tmp+"', '"+body.restaurant+"', "+i+");",
                             function(err, rows) {
                               if(err) throw err;
                             });
                             btid_tmp++;
-                          }}
+                          }
+
+                        }
+                        });
                     }
                     res.redirect('/thankyou'); 
                   });  
@@ -188,6 +195,10 @@ module.exports = function(app) {
                 if(err) throw err;
               });
               Hoteltoken.query("Delete FROM Hoteltoken WHERE restaurant='"+body.restaurant+"';",
+              function(err, rows) {
+                if(err) throw err;
+              });
+              Hoteltoken1.query("Delete FROM device_lookup WHERE restaurant='"+body.restaurant+"';",
               function(err, rows) {
                 if(err) throw err;
               });
