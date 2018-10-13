@@ -29,6 +29,14 @@ router.get('/restpwd', authenticate, (req, res) => {
 router.get('/deluser', authenticate, (req, res) => {
   res.render('index/deluser');
 });
+router.get('/history', authenticate, (req, res) => {
+  res.render('index/history');
+});
+
+router.get('/updtable', authenticate, (req, res) => {
+  res.render('index/updtable');
+});
+
 router.get('/userdetail', authenticate, (req, res) => {
   var users =[];
   var rest =[];

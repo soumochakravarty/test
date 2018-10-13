@@ -70,6 +70,7 @@ function drawWaiterChart() {
       // Instantiate and draw our chart, passing in some options.
       var chart = new google.visualization.PieChart(document.getElementById('chart_waiter_div'));
       var waiterchart_options = {title:'Open Call Distribution:',
+                        pieSliceText: 'label',
                        //width:400,
                        //height:300,
                        legend: 'none'}; 
@@ -92,6 +93,7 @@ function drawReasonChart() {
       // Instantiate and draw our chart, passing in some options.
       var chart = new google.visualization.PieChart(document.getElementById('chart_request_div'));
       var waiterchart_options = {title:'Service Type Distribution:',
+                      pieSliceText: 'label',
                        //width:400,
                        //height:300,
                        legend: 'none'};
@@ -109,9 +111,8 @@ function drawReasonChart() {
         <div id="chart_div" class="chartdiv"></div>
       </div>
 
-        <div class="link" id="chart_waiter_div" ></div></td>
-        
-        <div class="link" id="chart_request_div" ></div></td>
+        <div class="link" id="chart_waiter_div" ></div>
+        <div class="link" id="chart_request_div" ></div>
 
   </body>
 </html>
