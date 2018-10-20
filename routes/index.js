@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 var {authenticate} = require('../middleware/authenticate');
 var Hoteltoken = require('../config/hoteltokenCon');
+var Hoteltoken1 = require('../config/hoteltokenCon');
+var Hoteltoken2 = require('../config/hoteltokenCon');
 //const {ensureAuthenticated, ensureGuest} = require('../helpers/auth');
 
 router.get('/', (req, res) => {
@@ -33,21 +35,50 @@ router.get('/history', authenticate, (req, res) => {
   res.render('index/history');
 });
 
+router.get('/dailyanz', authenticate, (req, res) => {
+  var daily =[];
+  var weekly =[];
+  var monthly =[];
+  sess=req.session;
+  Hoteltoken.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 1 GROUP BY waiter ORDER BY WAIT_TIME;",
+  function(err, rows) {
+      if(err) throw err;
+    var length = rows.length;
+     for( var i = 0 ; i<length ; i++){
+      daily[i]= rows[i];
+    }
+  Hoteltoken1.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 8 GROUP BY waiter ORDER BY WAIT_TIME;",
+      function(err, rows) {
+          if(err) throw err;
+        var length = rows.length;
+         for( var i = 0 ; i<length ; i++){
+          weekly[i]= rows[i];
+        }
+  Hoteltoken2.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 32 GROUP BY waiter ORDER BY WAIT_TIME;",
+        function(err, rows) {
+              if(err) throw err;
+            var length = rows.length;
+             for( var i = 0 ; i<length ; i++){
+          monthly[i]= rows[i];}
+  res.render('index/dailyanz',{daily:daily,weekly:weekly,monthly:monthly});
+              });
+          });    
+      });
+});
+
 router.get('/updtable', authenticate, (req, res) => {
   res.render('index/updtable');
 });
 
 router.get('/userdetail', authenticate, (req, res) => {
   var users =[];
-  var rest =[];
   Hoteltoken.query("SELECT email,restaurant FROM `user` WHERE email !='admin@admin.com' ORDER BY restaurant",
   function(err, rows) {
       if(err) throw err;
     var length = rows.length;
      for( var i = 0 ; i<length ; i++){
-      users[i]= rows[i].email + " : " + rows[i].restaurant;
+      users[i]= rows[i];
       }
-
   res.render('index/userdetail',{users:users});
 });
 

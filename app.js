@@ -16,13 +16,15 @@ app.use(session({secret: process.env.JWT_SECRET,resave: true,
 const index = require('./routes/index');
 // Handlebars Helpers
 const {
-  equal
+  equal,
+  ifcon
 } = require('./helper/hbs');
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
   helpers: {
-    equal: equal
+    equal: equal,
+    ifcon: ifcon
   },
   defaultLayout:'main'
 }));

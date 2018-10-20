@@ -1,13 +1,21 @@
-<h1>Users for Call System </h1>
+<h3>Active Users for Call System </h3>
 <div class="row">
+<table class="responsive-table">
+        <thead class="card-panel green">
+          <tr>
+              <th>User Name </th>
+              <th>Restaurant Name</th>
+          </tr>
+        </thead>
 
+        <tbody>
 {{#each users}}
-<tbody> 
-     <tr> 
-    <td><h5>{{this}}</h5></td>
-     <tr> 
-</tbody> 
+          <tr class="card-panel yellow lighten-5">
+            <td>{{this.email}}</td>
+            <td>{{this.restaurant}}</td>
+          </tr>
 {{/each}}
-
+        </tbody>
+      </table>
 </div>
 </html>

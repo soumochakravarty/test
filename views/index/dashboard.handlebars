@@ -14,6 +14,8 @@
     // Draw the pie chart for Reason.
      google.charts.setOnLoadCallback(drawReasonChart);
 
+     //google.charts.setOnLoadCallback(drawWaiterTable);
+
 
     // Draw the Bar chart for Wait time
     google.charts.setOnLoadCallback(function () {
@@ -43,7 +45,7 @@
                             max: 15 }} ,
                      legend: { position: "none" },
                      bar: { groupWidth: '10' },
-                         
+                    backgroundColor: '#f1f8e9',
                      //bars: 'horizontal',
                      isStacked: true
 
@@ -101,18 +103,42 @@ function drawReasonChart() {
      setTimeout(drawReasonChart,10000);
 
 }
+
+/*function drawWaiterTable() {
+  var jsonData = $.ajax({
+          url: "/api/waitertable",
+          dataType: "json",
+          async: false
+          }).responseText;
+     //document.write(jsonData);
+      // Create our data table out of JSON data loaded from server.
+      
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.Table(document.getElementById('table_waiter_div'));
+      var waiterchart_options = {showRowNumber: true, 
+      width: '100%', 
+      height: '100%'};
+      chart.draw(data, waiterchart_options);
+     setTimeout(drawWaiterTable,10000);
+
+}*/
     </script>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
+  <h3></h3>
     <!--<div id="chart_div"></div>-->
     <div class="chartwrapper">
-        <div id="chart_div" class="chartdiv"></div>
+        <div id="chart_div" class="chartdiv z-depth-5"></div>
       </div>
-
+<h1></h1>
         <div class="link" id="chart_waiter_div" ></div>
         <div class="link" id="chart_request_div" ></div>
+<h1></h1>
 
-  </body>
+
+</body>
 </html>
