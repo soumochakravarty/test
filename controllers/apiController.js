@@ -46,6 +46,9 @@ else{
 }
 var res_data_fin = res_data.substring(0, res_data.length-2);
 res_data_fin = res_data_fin + '], "p":null }';
+/*if (length === 0 ){
+    res_data_fin ="";
+}*/
  res.send(res_data_fin);
     }
 );        
@@ -68,6 +71,9 @@ app.get('/api/waiter', function(req,res) {
     }
     var res_data_fin = res_data.substring(0, res_data.length-2);
     res_data_fin = res_data_fin + '] }';
+    if (length === 0 ){
+        res_data_fin ="";
+    }
      res.send(res_data_fin);
         }
     );        
@@ -91,7 +97,9 @@ app.get('/api/request', function(req,res) {
     }
     var res_data_fin = res_data.substring(0, res_data.length-2);
     res_data_fin = res_data_fin + '] }';
-    
+    if (length === 0 ){
+        res_data_fin ="";
+    }
      res.send(res_data_fin);
         }
     );        
@@ -182,7 +190,7 @@ app.get('/api/request', function(req,res) {
         sess=req.session;
         var workbook = new excel.Workbook(); //creating workbook
         var sheet = workbook.addWorksheet('History Data'); //creating worksheet
-        var valueArray = ['Table No','Restaurant Name','Owner','Request','Time','Wait Time'];
+        var valueArray = ['Table No','Restaurant Name','Name','Request','Time','Wait Time'];
         sheet.addRow(valueArray);
         Hoteltoken.query("SELECT tid, restaurant, waiter, request, start_time, wait_time FROM `history` WHERE restaurant='"+sess.restaurant+"' AND start_time between '"+req.body.sdate+"' AND '"+req.body.edate+"';",
         function(err, rows) {
@@ -425,21 +433,103 @@ app.get('/api/waitertable', function(req,res) {
     //Hoteltoken.query("SELECT waiter, count(*) as tables FROM `tb3` WHERE request !='CANCEL' group by (waiter)",
             function(err, rows) {
                 if(err) throw err;
-    var res_data = '{"cols":[ {"id":"","label":"Name","pattern":"","type":"string"}, {"id":"","label":"Calls","pattern":"","type":"number"}, {"id":"","label":"Wait Time","pattern":"","type":"number"} ], "rows":[ ' ;
+    var res_data = '{"cols":[ {"id":"","label":"Name","pattern":"","type":"string"}, {"id":"","label":"Calls","pattern":"","type":"number"}, {"id":"","label":"Max Wait Time","pattern":"","type":"number"} ], "rows":[ ' ;
     var length  = rows.length;
     if (length === 0 ){
-        res_data = res_data + '{"c":[{"v":" ","f":null},{"v":0,"f":null},{"v":0,"f":null} ]}, ';
+        res_data = res_data + '{"c":[{"v":" ","f":null},{"v":" ","f":null},{"v":" ","f":null} ]}, ';
     }
     for(var i=0;i<length;i++){
     res_data = res_data + '{"c":[{"v":"' + rows[i].waiter + '","f":null},{"v":'+ rows[i].tables + ',"f":null},{"v":'+ rows[i].wait_time + ',"f":null} ]}, ';
     }
     var res_data_fin = res_data.substring(0, res_data.length-2);
     res_data_fin = res_data_fin + '] }';
+    if (length === 0 ){
+        res_data_fin ="";
+    }
      res.send(res_data_fin);
         }
     );        
         });
 
 
+        app.post('/device/download', function(req, res) {
+            var workbook = new excel.Workbook(); //creating workbook
+            var sheet = workbook.addWorksheet('Device Data'); //creating worksheet
+            var valueArray = ['Restaurant No','Button No','Request','Restaurant Name','Table No'];
+            sheet.addRow(valueArray);
+            Hoteltoken.query("SELECT restaurantid, buttonid, request, restaurant, tid FROM device_lookup WHERE restaurant='"+req.body.restaurant+"';",
+            function(err, rows) {
+            if(err) throw err;
+            var length  = rows.length;
+            for(var i=0;i<length;i++)
+            sheet.addRow([rows[i].restaurantid,rows[i].buttonid,rows[i].request,rows[i].restaurant,rows[i].tid]);
+                var tempFilePath = tempfile('.xlsx');
+                workbook.xlsx.writeFile(tempFilePath).then(function() {
+                res.sendFile(tempFilePath);
+            });
+              })
+                    });
+
+    app.post('/device/upload', function(req, res) {
+    var devicefile = req.files.devicefile;
+    if(req.files.devicefile.name.split('.')[req.files.devicefile.name.split('.').length-1] != 'xlsx') {
+        res.send('Upload xlsx file only');
+        } 
+    else{
+    var tempFilePath = tempfile('.xlsx');
+    devicefile.mv(tempFilePath,function(err) {
+        if (err) {
+        console.log('eror saving');
+        }
+        else{
+    var workbook = new excel.Workbook(); 
+    workbook.xlsx.readFile(tempFilePath).then(function() {
+        var workSheet =  workbook.getWorksheet("Device Data"); 
+        var restaurant;
+        var i=0;
+        var err=0;
+        workSheet.eachRow({ includeEmpty: true }, function(row, rowNumber) {
+            if (i == 1 || i == 0)
+            {
+        restaurant=row.values[4]; 
+            }
+        else{
+        if (restaurant != row.values[4]){
+            err = 1;
+        }
+    }
+        i++;
+        });
+        if (err == 0)
+        {  
+        Hoteltoken.query("DELETE FROM device_lookup WHERE restaurant='"+restaurant+"';",
+        function(err, rows) {
+        if(err) throw err;
+        var workbook = new excel.Workbook(); 
+        workbook.xlsx.readFile(tempFilePath).then(function() {
+        var workSheet =  workbook.getWorksheet("Device Data"); 
+        var i = 0;
+        workSheet.eachRow({ includeEmpty: true }, function(row, rowNumber) {
+        if (i != 0){
+        Hoteltoken1.query("INSERT INTO device_lookup (`restaurantid`, `buttonid`, `request`, `restaurant`, `tid`) VALUES ('"+row.values[1]+"', '"+row.values[2]+"', '"+row.values[3]+"', '"+row.values[4]+"', '"+row.values[5]+"');;",
+            function(err, rows) {
+            if(err) throw err;
+                  });
+                }
+        i++;
+        });
+    });
+    });
+
+    res.redirect('/thankyou'); 
+}
+ else{
+    res.send('Multiple Restaurant DATA in the xls');
+ }   
+
+});
+}});
+    }
+});
                 
 }

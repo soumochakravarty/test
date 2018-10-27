@@ -7,7 +7,7 @@
 
     // Load the Visualization API and the piechart package.
     google.charts.load('current', {'packages':['corechart']});
-    
+   
      // Draw the pie chart for Waiter.
      google.charts.setOnLoadCallback(drawDailyAllChart);
      google.charts.setOnLoadCallback(drawDailyIndChart);
@@ -66,10 +66,10 @@ function drawDailyAllChart() {
             bold: true
           }
         },
-        backgroundColor: '#f1f8e9'
+        backgroundColor: '#e1e8f0'
         };
       chart.draw(data, waiterchart_options);
-      setTimeout(drawDailyAllChart,10000);
+      
 }
 
 
@@ -120,11 +120,11 @@ function drawDailyIndChart() {
             bold: true
           }
         },
-        curveType: 'function'
-
+        curveType: 'function',
+        backgroundColor: '#e1e8f0'
         };
       chart.draw(data, waiterchart_options);
-      setTimeout(drawDailyIndChart,10000);
+      
 }
 
 function drawWeeklyAllChart () {
@@ -173,7 +173,7 @@ function drawWeeklyAllChart () {
             bold: true
           }
         },
-        backgroundColor: '#f1f8e9'
+        backgroundColor: '#e1e8f0'
         };
       chart.draw(data, waiterchart_options);
       setTimeout(drawWeeklyAllChart,10000);
@@ -227,7 +227,8 @@ function drawWeeklyIndChart() {
             bold: true
           }
         },
-        curveType: 'function'
+        curveType: 'function',
+        backgroundColor: '#e1e8f0'
 
         };
       chart.draw(data, waiterchart_options);
@@ -281,9 +282,10 @@ function drawMonthlyAllChart() {
             bold: true
           }
         },
-        backgroundColor: '#f1f8e9'
+        backgroundColor: '#e1e8f0'
         };
       chart.draw(data, waiterchart_options);
+      setTimeout(drawMonthlyAllChart,10000);
 }
 
 
@@ -334,21 +336,24 @@ function drawMonthlyIndChart() {
             bold: true
           }
         },
-        curveType: 'function'
+        curveType: 'function',
+        backgroundColor: '#e1e8f0'
 
         };
       chart.draw(data, waiterchart_options);
+      setTimeout(drawMonthlyIndChart,10000);
 }
 
      </script>   
 </head>
 <h3></h3>
+<center><h3 class="gen-h1" >Analysis</h3></center>
 <nav class="nav-extended purple darken-4 z-depth-5">
     <div class="nav-content">
       <ul class="tabs tabs-transparent">
-        <li class="tab"><a href="#daily">Daily    </a></li>
+        <li class="tab"><a class="active" href="#daily">Daily    </a></li>
         <li class="tab"><a href="#weekly">Weekly    </a></li>
-        <li class="tab"><a class="active" href="#monthly">Monthly    </a></li>
+        <li class="tab"><a href="#monthly">Monthly    </a></li>
       </ul>
     </div>
   </nav>
@@ -377,10 +382,7 @@ function drawMonthlyIndChart() {
 {{/each}}
         </tbody>
       </table>
- <script type="text/javascript">
- google.charts.setOnLoadCallback(drawDailyAllChart);
- google.charts.setOnLoadCallback(drawDailyIndChart);
- </script>
+
 <h3></h3>
 <div id="daily_all_div" ></div>
 <h3></h3>
@@ -413,7 +415,6 @@ function drawMonthlyIndChart() {
 {{/each}}
         </tbody>
       </table>
-
 <h3></h3>
 <div id="weekly_all_div" ></div>
 <h3></h3>

@@ -6,11 +6,16 @@ var apiController = require('./controllers/apiController');
 var userController = require('./controllers/userController');
 const exphbs = require('express-handlebars');
 var session = require('express-session');
+const fileUpload = require('express-fileupload');
 
 var port = process.env.PORT;
 var sess;
+var idleTimeoutSeconds = 1000;
 app.use('/', express.static(__dirname + '/public'));
-app.use(session({secret: process.env.JWT_SECRET,resave: true,
+app.use(session({secret: process.env.JWT_SECRET,resave: true,cookie: {
+  maxAge: idleTimeoutSeconds * 1000,
+  },
+  rolling: true,
   saveUninitialized: true}));
 // Load Routes
 const index = require('./routes/index');
@@ -29,6 +34,7 @@ app.engine('handlebars', exphbs({
   defaultLayout:'main'
 }));
 
+app.use(fileUpload());
 
 
 app.set('view engine', 'handlebars');

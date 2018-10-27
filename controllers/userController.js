@@ -77,9 +77,9 @@ module.exports = function(app) {
                         for( var j = 1 ; j <= 4 ; j++){
                           var req_tmp;
                           if ( j == 1)
-                          req_tmp='Drink';
-                          else if( j == 2)
                           req_tmp='Call';
+                          else if( j == 2)
+                          req_tmp='Drink';
                           else if( j == 3)
                           req_tmp='Bill';
                           else 

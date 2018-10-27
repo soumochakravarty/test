@@ -6,7 +6,7 @@
     <script type="text/javascript">
 
     // Load the Visualization API and the piechart package.
-    google.charts.load('current', {'packages':['corechart']});
+    google.charts.load('current', {'packages':['corechart','table']});
     
      // Draw the pie chart for Waiter.
      google.charts.setOnLoadCallback(drawWaiterChart);
@@ -14,12 +14,10 @@
     // Draw the pie chart for Reason.
      google.charts.setOnLoadCallback(drawReasonChart);
 
-     //google.charts.setOnLoadCallback(drawWaiterTable);
+     google.charts.setOnLoadCallback(drawWaiterTable);
 
-
+     google.charts.setOnLoadCallback(drawChart);
     // Draw the Bar chart for Wait time
-    google.charts.setOnLoadCallback(function () {
-      
     function drawChart() {
       var jsonData = $.ajax({
           url: "/api/hoteltoken",
@@ -45,19 +43,28 @@
                             max: 15 }} ,
                      legend: { position: "none" },
                      bar: { groupWidth: '10' },
-                    backgroundColor: '#f1f8e9',
+                    backgroundColor: '#e1e8f0',
                      //bars: 'horizontal',
                      isStacked: true
 
                      };
+        /*if ( jsonData == ""){ 
+         options = {  
+        width: 1, height: 0,
+        legend: { position: "none" }
+                     };         
 
+      data.addColumn('string', 'hhhj');
+      data.addColumn('number', ' ');
+      data.addRows([
+        [' ', 0],
+        [' ', 0]
+      ]);
+      }*/
       chart.draw(data, options);
-             
       setTimeout(drawChart,10000);
     }
-    drawChart();
-    
-});
+
 
 function drawWaiterChart() {
   var jsonData = $.ajax({
@@ -73,10 +80,24 @@ function drawWaiterChart() {
       var chart = new google.visualization.PieChart(document.getElementById('chart_waiter_div'));
       var waiterchart_options = {title:'Open Call Distribution:',
                         pieSliceText: 'label',
+                        backgroundColor: '#e1e8f0',
                        //width:400,
                        //height:300,
                        legend: 'none'}; 
+           if ( jsonData == ""){
+         waiterchart_options = {  
+        width: '0%', height: '0%' ,
+        backgroundColor: '#e1e8f0',
+                     };
+      data.addColumn('string', ' ');
+      data.addColumn('number', ' ');
+      data.addRows([
+        [' ', 0],
+        [' ', 0]
+      ]);
+      }
       chart.draw(data, waiterchart_options);
+      
      setTimeout(drawWaiterChart,10000);
 
 }
@@ -96,15 +117,29 @@ function drawReasonChart() {
       var chart = new google.visualization.PieChart(document.getElementById('chart_request_div'));
       var waiterchart_options = {title:'Service Type Distribution:',
                       pieSliceText: 'label',
+                      backgroundColor: '#e1e8f0',
                        //width:400,
                        //height:300,
                        legend: 'none'};
+      if ( jsonData == ""){
+         waiterchart_options = {  
+        width: '0%', height: '0%',
+        backgroundColor: '#e1e8f0',
+                     };
+      data.addColumn('string', ' ');
+      data.addColumn('number', ' ');
+      data.addRows([
+        [' ', 0],
+        [' ', 0]
+      ]);
+      }
       chart.draw(data, waiterchart_options);
+      
      setTimeout(drawReasonChart,10000);
 
 }
 
-/*function drawWaiterTable() {
+function drawWaiterTable() {
   var jsonData = $.ajax({
           url: "/api/waitertable",
           dataType: "json",
@@ -117,18 +152,37 @@ function drawReasonChart() {
 
       // Instantiate and draw our chart, passing in some options.
       var chart = new google.visualization.Table(document.getElementById('table_waiter_div'));
-      var waiterchart_options = {showRowNumber: true, 
-      width: '100%', 
-      height: '100%'};
+      var cssClassNames = {
+'headerRow': 'white-font large-font bold-font purpel-background black-border',
+'tableRow': 'black-border',
+'oddTableRow': 'beige-background',
+'selectedTableRow': 'large-font',
+'hoverTableRow': '',
+'headerCell': 'black-border',
+'tableCell': 'black-border',
+};
+      var waiterchart_options = {  
+        width: '70%', height: '100%'
+        ,'cssClassNames': cssClassNames
+                     };
+      if ( jsonData == ""){
+         waiterchart_options = {  
+        width: '0%', height: '0%'
+                     };
+      }
       chart.draw(data, waiterchart_options);
-     setTimeout(drawWaiterTable,10000);
 
-}*/
+ 
+     setTimeout(drawWaiterTable,10000);
+}
     </script>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 
   <body>
+<h1></h1>
+<center><h3 class="gen-h1" >Dashboard</h3></center>
+<div id="table_waiter_div"></div>
   <h3></h3>
     <!--<div id="chart_div"></div>-->
     <div class="chartwrapper">
@@ -137,8 +191,5 @@ function drawReasonChart() {
 <h1></h1>
         <div class="link" id="chart_waiter_div" ></div>
         <div class="link" id="chart_request_div" ></div>
-<h1></h1>
-
-
 </body>
 </html>

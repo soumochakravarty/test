@@ -14,6 +14,7 @@
     "ejs": "^2.6.1",
     "exceljs": "^1.6.2",
     "express": "^4.16.3",
+    "express-fileupload": "^1.0.0",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
     "handlebars-helper-equal": "^1.0.0",

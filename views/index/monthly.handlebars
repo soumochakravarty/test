@@ -1,0 +1,161 @@
+<html> 
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    // Load the Visualization API and the piechart package.
+    google.charts.load('current', {'packages':['corechart']});
+   
+     // Draw the pie chart for Waiter.
+
+     google.charts.setOnLoadCallback(drawMonthlyAllChart);
+     google.charts.setOnLoadCallback(drawMonthlyIndChart);
+
+function drawMonthlyAllChart() {
+  var jsonData = $.ajax({
+          url: "/api/monthlyall",
+          dataType: "json",
+          async: false
+          }).responseText;
+     //document.write(jsonData);
+      // Create our data table out of JSON data loaded from server.
+      
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.LineChart(document.getElementById('monthly_all_div'));
+      var waiterchart_options = {title:'OverAll Wait Time Analysis:',
+        hAxis: {
+          title: 'Time',
+          logScale: true,
+          textStyle: {
+            color: '#01579b',
+            fontSize: 13,
+            bold: true,
+            italic: true
+          },
+          titleTextStyle: {
+            color: '#01579b',
+            fontSize: 20,
+            bold: true,
+            italic: true
+          }
+        },
+        vAxis: {
+          title: 'Wait Time',
+          logScale: false,
+          textStyle: {
+            color: '#1a237e',
+            fontSize: 13,
+            italic: true,
+            bold: true
+          },
+          titleTextStyle: {
+            color: '#1a237e',
+            fontSize: 20,
+            italic: true,
+            bold: true
+          }
+        },
+        backgroundColor: '#e1e8f0'
+        };
+      chart.draw(data, waiterchart_options);
+     // setTimeout(drawMonthlyAllChart,10000);
+}
+
+
+function drawMonthlyIndChart() {
+  var jsonData = $.ajax({
+          url: "/api/monthlyind",
+          dataType: "json",
+          async: false
+          }).responseText;
+     //document.write(jsonData);
+      // Create our data table out of JSON data loaded from server.
+      
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.LineChart(document.getElementById('monthly_ind_div'));
+      var waiterchart_options = {title:'Wait Time Analysis For Each Person:',
+      curveType: 'function',
+        hAxis: {
+          title: 'Time',
+          logScale: true,
+          textStyle: {
+            color: '#01579b',
+            fontSize: 13,
+            bold: true,
+            italic: true
+          },
+          titleTextStyle: {
+            color: '#01579b',
+            fontSize: 20,
+            bold: true,
+            italic: true
+          }
+        },
+        vAxis: {
+          title: 'Wait Time',
+          logScale: false,
+          textStyle: {
+            color: '#1a237e',
+            fontSize: 13,
+            italic: true,
+            bold: true
+          },
+          titleTextStyle: {
+            color: '#1a237e',
+            fontSize: 20,
+            italic: true,
+            bold: true
+          }
+        },
+        curveType: 'function',
+        backgroundColor: '#e1e8f0'
+
+        };
+      chart.draw(data, waiterchart_options);
+     // setTimeout(drawMonthlyIndChart,10000);
+}
+
+     </script>   
+</head>
+<h3></h3>
+<center><h3 class="gen-h1" >Monthly Analysis</h3></center>
+
+
+
+<div id="monthly">
+<table class="responsive-table">
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>Wait Time</th>
+              <th>Calls</th>
+          </tr>
+        </thead>
+
+        <tbody>
+{{#each monthly}}
+          <tr>
+            <td class="deep-purple-text">{{this.waiter}}</td>
+            {{#if (ifcon 5 this.WAIT_TIME)}}
+            <td class="green-text">{{this.WAIT_TIME}}</td>
+            <td class="green-text">{{this.CALLS}}</td>
+            {{else}}
+            <td class="red-text">{{this.WAIT_TIME}}</td>
+            <td class="red-text">{{this.CALLS}}</td>
+            {{/if}}
+          </tr>
+{{/each}}
+        </tbody>
+      </table>
+
+<h3></h3>
+<div id="monthly_all_div" ></div>
+<h3></h3>
+<div id="monthly_ind_div" ></div>
+</div>

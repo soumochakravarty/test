@@ -3,6 +3,7 @@
     height: 50%;
     float: left;
     text-align: center;
+
 }
 .chartwrapper {
   width: 80%;
@@ -35,3 +36,96 @@ footer{
   margin-top:20px;
 }
 
+.orange-background {
+  background-color: orange;
+ }
+
+.grey-background {
+ background-color: grey;
+}
+
+.beige-background {
+background-color: beige;
+ }
+
+ .purpel-background {
+  background-color: purple;
+   }
+
+   .bold-green-font {
+    font-weight: bold;
+    color: green;
+  }
+
+  .bold-font {
+    font-weight: bold;
+  }
+
+  .right-text {
+    text-align: right;
+  }
+
+  .large-font {
+    font-size: 15px;
+  }
+  .white-font {
+    font-style: bold;
+    color: white;
+  }
+
+  .italic-purple-font {
+    font-style: italic;
+    color: purple;
+  }
+
+  .underline-blue-font {
+    text-decoration: underline;
+    color: blue;
+  }
+
+  .gold-border {
+    border: 3px solid gold;
+  }
+
+  .deeppink-border {
+    border: 3px solid deeppink;
+  }
+  .black-border {
+    border: 5px solid black;
+  }
+
+.main-h1 {
+    margin: 1em 0 0.5em 0;
+    font-weight: 600;
+    font-family: 'Titillium Web', sans-serif;
+    position: relative;  
+    font-size: 36px;
+    line-height: 40px;
+    padding: 15px 15px 15px 15%;
+    color: black;
+    box-shadow: 
+      inset 0 0 0 1px rgba(53,86,129, 0.4), 
+      inset 0 0 5px rgba(53,86,129, 0.5);
+    border-radius: 0 10px 0 10px;
+    background: url(../images/heading.jpg) repeat center;
+  }
+
+  .gen-h1 {
+    margin: 1em 0 0.5em 0;
+    font-weight: 600;
+    font-family: 'Titillium Web', sans-serif;
+    position: relative;  
+    font-size: 36px;
+    line-height: 40px;
+    padding: 15px 15px 15px 15%;
+    color: whitesmoke;
+    box-shadow: 
+      inset 0 0 0 1px rgba(53,86,129, 0.4), 
+      inset 0 0 5px rgba(53,86,129, 0.5);
+    border-radius: 0 10px 0 10px;
+    background: url(../images/main.jpg) repeat center;
+  }
+  .logo{
+    width:130px;
+    margin:auto;
+  }

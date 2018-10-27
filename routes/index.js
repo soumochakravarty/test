@@ -35,6 +35,20 @@ router.get('/history', authenticate, (req, res) => {
   res.render('index/history');
 });
 
+router.get('/devicestp', authenticate, (req, res) => {
+  var restaurant =[];
+  Hoteltoken.query("SELECT DISTINCT restaurant FROM device_lookup;",
+  function(err, rows) {
+      if(err) throw err;
+    var length = rows.length;
+     for( var i = 0 ; i<length ; i++){
+      restaurant[i]= rows[i];
+     }
+      res.render('index/devicestp',{restaurant:restaurant});
+    });
+  
+});
+
 router.get('/dailyanz', authenticate, (req, res) => {
   var daily =[];
   var weekly =[];
@@ -65,6 +79,51 @@ router.get('/dailyanz', authenticate, (req, res) => {
           });    
       });
 });
+
+router.get('/daily', authenticate, (req, res) => {
+  var daily =[];
+  sess=req.session;
+  Hoteltoken.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 1 GROUP BY waiter ORDER BY WAIT_TIME;",
+  function(err, rows) {
+      if(err) throw err;
+    var length = rows.length;
+     for( var i = 0 ; i<length ; i++){
+      daily[i]= rows[i];
+    }
+  
+  res.render('index/daily',{daily:daily});
+              });
+          });    
+
+
+router.get('/weekly', authenticate, (req, res) => {
+  var weekly =[];
+  sess=req.session;
+  Hoteltoken1.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 8 GROUP BY waiter ORDER BY WAIT_TIME;",
+      function(err, rows) {
+          if(err) throw err;
+        var length = rows.length;
+         for( var i = 0 ; i<length ; i++){
+          weekly[i]= rows[i];
+        }
+  res.render('index/weekly',{weekly:weekly});
+              });
+          });    
+
+
+router.get('/monthly', authenticate, (req, res) => {
+  var monthly =[];
+  sess=req.session;
+  Hoteltoken2.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 32 GROUP BY waiter ORDER BY WAIT_TIME;",
+        function(err, rows) {
+              if(err) throw err;
+            var length = rows.length;
+             for( var i = 0 ; i<length ; i++){
+          monthly[i]= rows[i];}
+  res.render('index/monthly',{monthly:monthly});
+              });
+          });    
+
 
 router.get('/updtable', authenticate, (req, res) => {
   res.render('index/updtable');

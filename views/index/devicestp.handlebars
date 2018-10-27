@@ -1,0 +1,23 @@
+<h3>STEP 1 : Download Data</h3>
+<div class="row">
+  <form action="/device/download" method="post" class="col s12">
+<div class="input-field col s12">
+    <select name="restaurant">
+      <option value="" disabled selected>Choose Restaurant</option>
+{{#each restaurant}}
+    <option value="{{this.restaurant}}">{{this.restaurant}}</option>
+{{/each}}
+    </select>
+    <label>Restaurant</label>
+</div>
+    <input type="submit" value="Download" class="btn green accent-4 z-depth-3">
+  </form>
+</div>
+
+<h3>STEP 2 : Upload After Making Changes</h3>
+<div class="row">
+    <form ref='uploadForm' encType="multipart/form-data" action="/device/upload" method="post">
+      <input type="file" name="devicefile" value=""><br>
+      <input type="submit" name="" value="Upload to Update" class="btn green accent-4 z-depth-3">
+    </form>
+</div>

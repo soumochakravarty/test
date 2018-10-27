@@ -27,28 +27,32 @@
         {{#if (equal session.email "admin@admin.com")}}
     
         <li><a href="/createuser" ><i class="fa fa-cogs"></i> Creat User </a></li>
-        <li><a href="/restpwd"><i class="fa fa-repeat"></i> Reset Password all User</a></li>
-        <li><a href="/deluser"> <i class="fa fa-trash-o"></i>  Delete User </a></li>
-        <li><a href="/updtable"> <i class="fa fa-plus-square"></i>  Add/Delete Table </a></li>
-        <li><a href="/users/logout"><i class="fa fa-sign-out"></i> Logout </a></li>
+        <li><a href="/restpwd"><i class="fa fa-repeat"></i> Rst Pwd Any User</a></li>
+        <li><a href="/deluser"> <i class="fa fa-trash-o"></i>Delete User </a></li>
+        <li><a href="/updtable"> <i class="fa fa-plus-square"></i>Add/Delete Table </a></li>
+        <li><a href="/devicestp"> <i class="fa fa-cog"></i>Device Setup</a></li>
+        <li><a href="/users/logout"><i class="fa fa-sign-out"></i>Logout </a></li>
         {{else}}
         <li><a href="/dashboard" class="white-text"> <i class="fa fa-bar-chart"></i>  Dashboard </a></li>
         <li><a href="/setup" class="white-text"><i class="fa fa-cog"></i> Setup Tables </a></li>
-        <li><a href="/restpwd" class="white-text"><i class="fa fa-repeat"></i> Change Password </a></li>
-        
+        <li><a href="/history" class="white-text">Download Records<i class="fa fa-download"></i></a></li>
         <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
           <li>
-            <a class="collapsible-header white-text">History Data<i class="fa fa-history"></i></a>
+            <a class="collapsible-header white-text">Analysis <i class="fa fa-line-chart"></i></a>
             <div class="collapsible-body cyan darken-3">
               <ul>
-                <li><a href="/history" class="white-text">Download Details<i class="fa fa-download"></i></a></li>
-                <li><a href="/dailyanz" class="white-text">Analysis<i class="fa fa-line-chart"></i></a></li>
+                <li><a href="/daily" class="white-text">Daily<i class="fa fa-minus"></i></a></li>
+                <li><a href="/weekly" class="white-text">Weekly<i class="fa fa-minus"></i></a></li>
+                <li><a href="/monthly" class="white-text">Monthly<i class="fa fa-minus"></i></a></li>
+           
+           
               </ul>
             </div>
           </li>
         </ul>
       </li>
+      <li><a href="/restpwd" class="white-text"><i class="fa fa-repeat"></i> Change Password </a></li>
       <li><a href="/users/logout" class="white-text"><i class="fa fa-sign-out"></i> Logout </a></li>
         {{/if}}
       </ul>
