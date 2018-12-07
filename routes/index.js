@@ -6,13 +6,30 @@ var Hoteltoken1 = require('../config/hoteltokenCon');
 var Hoteltoken2 = require('../config/hoteltokenCon');
 //const {ensureAuthenticated, ensureGuest} = require('../helpers/auth');
 
-router.get('/', (req, res) => {
+router.get('/login', (req, res) => {
   res.render('index/login');
 });
+
+router.get('/', (req, res) => {
+  var url=req.originalUrl;
+  res.render('index/home_new',{url:url});
+});
+
+router.get('/home_thankyou', (req, res) => {
+  var url=req.originalUrl;
+  res.render('index/home_thankyou',{url:url});
+});
+
+router.get('/product', (req, res) => {
+  var url=req.originalUrl;
+  res.render('index/product',{url:url});
+});
+
 
 router.get('/about', (req, res) => {
   res.render('index/about');
 });
+
 
 router.get('/thankyou', authenticate, (req, res) => {
   res.render('index/thankyou');
@@ -34,6 +51,20 @@ router.get('/deluser', authenticate, (req, res) => {
 router.get('/history', authenticate, (req, res) => {
   res.render('index/history');
 });
+
+router.get('/cancel', authenticate, (req, res) => {
+  var call_no =[];
+  Hoteltoken.query("SELECT tid , TIMESTAMPDIFF(MINUTE,start_time,NOW()) as wait_time FROM Hoteltoken WHERE request !='CANCEL' and restaurant='"+sess.restaurant+"' ORDER BY wait_time DESC;",
+  function(err, rows) {
+    if(err) throw err;
+    var length = rows.length;
+     for( var i = 0 ; i<length ; i++){
+      call_no[i]= rows[i];
+     }
+      res.render('index/cancel',{call_no:call_no});
+    });
+});
+
 
 router.get('/devicestp', authenticate, (req, res) => {
   var restaurant =[];

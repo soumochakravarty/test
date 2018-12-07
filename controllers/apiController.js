@@ -1,7 +1,9 @@
+var config = require('../config/config.json');
 var Hoteltoken = require('../config/hoteltokenCon');
 var Hoteltoken1 = require('../config/hoteltokenCon');
 var Hoteltoken2 = require('../config/hoteltokenCon');
 var Hoteltoken3 = require('../config/hoteltokenCon');
+const sgMail = require('@sendgrid/mail');
 var User = require('../config/hoteltokenCon');
 var bodyParser = require('body-parser');
 var parser = require('json-parser');
@@ -10,6 +12,7 @@ var {authenticate} = require('../middleware/authenticate');
 var excel = require('exceljs');
 var tempfile = require('tempfile');
 
+var sendgrid_key = config.email.SENDGRID_API_KEY;
 
 module.exports = function(app) {
     
@@ -27,23 +30,28 @@ var length  = rows.length;
 var dif_min;
 var temp_waiter;
 if (length === 0 ){
-    res_data = res_data + '{"c":[{"v":" ","f":null},{"v":0,"f":null}, {"v":"green","f":null},{"v":" ","f":null} ]}, ';
+    res_data = res_data + '{"c":[{"v":" ","f":null},{"v":0,"f":null}, {"v":"#e1e8f0","f":null},{"v":" ","f":null} ]}, ';
 }
 for(var i=0;i<length;i++){
 dif_min=  Math.round(Math.abs((new Date()- new Date(rows[i].start_time)) / 60000 ));
 temp_waiter=rows[i].waiter + " " + dif_min +" min";
 if (dif_min <=2 ){
-res_data = res_data + '{"c":[{"v":"Table ' + rows[i].tid + '","f":null},{"v":'+ dif_min + ',"f":null}, {"v":"green","f":null},{"v":"'+temp_waiter+'","f":null} ]}, ';
+res_data = res_data + '{"c":[{"v":"' + rows[i].tid + '","f":null},{"v":'+ dif_min + ',"f":null}, {"v":"green","f":null},{"v":"'+temp_waiter+'","f":null} ]}, ';
 }
 else if (dif_min>2 && dif_min <=6){
-    res_data = res_data + '{"c":[{"v":"Table ' + rows[i].tid + '","f":null},{"v":'+ dif_min + ',"f":null}, {"v":"yellow","f":null},{"v":"'+temp_waiter+'","f":null} ]}, ';
+    res_data = res_data + '{"c":[{"v":"' + rows[i].tid + '","f":null},{"v":'+ dif_min + ',"f":null}, {"v":"#f1ca3a","f":null},{"v":"'+temp_waiter+'","f":null} ]}, ';
 }
 else{
-    res_data = res_data + '{"c":[{"v":"Table ' + rows[i].tid + '","f":null},{"v":'+ dif_min + ',"f":null}, {"v":"red","f":null},{"v":"'+temp_waiter+'","f":null} ]}, ';
+    res_data = res_data + '{"c":[{"v":"' + rows[i].tid + '","f":null},{"v":'+ dif_min + ',"f":null}, {"v":"red","f":null},{"v":"'+temp_waiter+'","f":null} ]}, ';
+}
+}
+if (length < 10 ){
+for(var i=length;i<10;i++){
+    //res_data = res_data + '{"c":[{"v":"","f":null},{"v":,"f":null}, {"v":"#e1e8f0","f":null},{"v":"","f":null} ]}, ';
+    res_data = res_data + '{"c":[{"v":" ","f":null},{"v":0,"f":null}, {"v":"#e1e8f0","f":null},{"v":" ","f":null} ]}, ';
+}
 }
 
-
-}
 var res_data_fin = res_data.substring(0, res_data.length-2);
 res_data_fin = res_data_fin + '], "p":null }';
 /*if (length === 0 ){
@@ -73,7 +81,7 @@ app.get('/api/waiter', function(req,res) {
     res_data_fin = res_data_fin + '] }';
     if (length === 0 ){
         res_data_fin ="";
-    }
+    } 
      res.send(res_data_fin);
         }
     );        
@@ -84,7 +92,6 @@ app.get('/api/request', function(req,res) {
     sess=req.session;
     Hoteltoken.query("SELECT request, count(*) as number FROM `Hoteltoken` WHERE request !='CANCEL' and restaurant='"+sess.restaurant+"' group by (request)",
     //Hoteltoken.query("SELECT request, count(*) as number FROM `tb3` WHERE request !='CANCEL' group by (request)",
-    
             function(err, rows) {
                 if(err) throw err;
     var res_data = '{"cols":[ {"id":"","label":"Request","pattern":"","type":"string"}, {"id":"","label":"Number","pattern":"","type":"number"} ], "rows":[ ' ;
@@ -115,7 +122,6 @@ app.get('/api/request', function(req,res) {
     });
     }
       res.redirect('/thankyou');
-        
               });
 
 
@@ -216,13 +222,21 @@ app.get('/api/request', function(req,res) {
             var resnm_tmp = rows[0].restaurant;
             var tid_tmp = rows[0].tid;
             var req_tmp = rows[0].request;
-            Hoteltoken1.query("UPDATE Hoteltoken set request='"+req_tmp+"', start_time=NOW() WHERE restaurant='"+resnm_tmp+"' and tid="+tid_tmp+";",
+
+            Hoteltoken1.query("UPDATE Hoteltoken set request='"+req_tmp+"', start_time=NOW() WHERE restaurant='"+resnm_tmp+"' and tid="+tid_tmp+" and request ='CANCEL';",
             function(err, rows) {
                 if(err) throw err;
                 else {
+            Hoteltoken2.query("UPDATE Hoteltoken set request='"+req_tmp+"' WHERE restaurant='"+resnm_tmp+"' and tid="+tid_tmp+";",
+                function(err, rows) {
+                if(err) throw err;
+                else {
                     res.sendStatus(200);        
+                    }
+                    });     
                 }
             });
+            
         }
     });
                 });
@@ -531,5 +545,66 @@ app.get('/api/waitertable', function(req,res) {
 }});
     }
 });
+
+
+// Wait time Table
+app.get('/api/calldetails', function(req,res) {
+    sess=req.session;
+    Hoteltoken.query("SELECT count(*) as CALLS FROM Hoteltoken WHERE request !='CANCEL' AND restaurant='"+sess.restaurant+"' UNION ALL SELECT COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' AND DATEDIFF(start_time,NOW()) = 0;",
+    function(err, rows) {
+    if(err) throw err;
+    var res_data = '{"cols":[ {"id":"","label":"Call Received","pattern":"","type":"number"}, {"id":"","label":"Call Open","pattern":"","type":"number"}, {"id":"","label":"Call Closed","pattern":"","type":"number"} ], "rows":[ ' ;
+    var length  = rows.length;
+    if (length === 0 ){
+        res_data = res_data + '{"c":[{"v":" ","f":null},{"v":" ","f":null},{"v":" ","f":null} ]}, ';
+    }
+   else{
+    var total_call = rows[0].CALLS + rows[1].CALLS;
+    res_data = res_data + '{"c":[{"v":"' + total_call + '","f":null},{"v":'+ rows[0].CALLS + ',"f":null},{"v":'+ rows[1].CALLS + ',"f":null} ]}, ';
+    }
+    var res_data_fin = res_data.substring(0, res_data.length-2);
+    res_data_fin = res_data_fin + '] }';
+    if (length === 0 ){
+        res_data_fin ="";
+    }
+     res.send(res_data_fin);
+        }
+    );        
+        });
+
+app.post('/api/cancel', function(req, res) {
+    sess=req.session;
+    var body = req.body;
+    if (!body.call)
+    res.sendStatus(400);
+    else{
+    Hoteltoken.query("UPDATE Hoteltoken set request='CANCEL' WHERE restaurant='"+sess.restaurant+"' and tid="+body.call+";",
+            function(err, rows) {
+             if(err) throw err;
+             else {
+                res.redirect('/thankyou');        
+            }
+             });
+    }
+                 });
                 
+
+app.post('/api/sendmail', function(req, res) {
+    var body = req.body;
+    var text_body= "<strong> Name: " + body.name + " <br></br>";
+    text_body = text_body + "Email ID: " + body.email + " <br></br>";
+    text_body = text_body + "Phone Number: " + body.phone + " <br></br>";
+    text_body = text_body + "Inquiry: " + body.message + + " </strong>";
+    sgMail.setApiKey(sendgrid_key);
+    const msg = {
+        to: 'soumo.chakravarty@gmail.com',
+        from: 'info@servicecallplus.com',
+        subject: 'Customer Inquiry',
+        html: text_body,
+      };
+      sgMail.send(msg);
+      res.redirect('/home_thankyou'); 
+    });
+
+
 }

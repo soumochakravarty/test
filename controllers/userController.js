@@ -58,7 +58,7 @@ module.exports = function(app) {
                         });
                       }
                       
-                        Hoteltoken2.query("SELECT max(restaurantid) as restaurantid, max(buttonid) as buttonid FROM `device_lookup;",
+                        Hoteltoken2.query("SELECT max(restaurantid) as restaurantid, max(buttonid) as buttonid FROM device_lookup;",
                         function(err, rows) {
                           if(err) throw err;
                         
