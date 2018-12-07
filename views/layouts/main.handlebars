@@ -1,51 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
-  <title>Call System</title>
+  <title>Service Call Plus</title>
 </head>
+
 <body>
-  {{> _header}} 
-  <!--{{#if user}}
-    {{> _add-btn}}
-  {{/if}}-->
+
+  {{#if url}}
+  <main>
+    {{{body}}}
+  </main>
+  {{else}}
+  {{> _header}}
   <main>
     <div class="container">
       {{{body}}}
     </div>
   </main>
- {{> _footer}} 
+  {{> _footer}}
+  {{/if}}
+  <!--{{#if user}}
+    {{> _add-btn}}
+  {{/if}}-->
 
-  <script
-  src="https://code.jquery.com/jquery-3.2.1.js"
-  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
-  crossorigin="anonymous">
-  </script>
+  <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous">
+    </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="https://cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>
 
   <script>
     $(document).ready(() => {
       $('.button-collapse').sideNav({
-      menuWidth: 250, // Default is 300
-      edge: 'left', // Choose the horizontal origin
-      closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-      draggable: true, });
-  
+        menuWidth: 250, // Default is 300
+        edge: 'left', // Choose the horizontal origin
+        closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+        draggable: true,
+      });
       $('select').material_select();
+      $('.slider').slider({ indicators: false });
       document.body.style.backgroundColor = "#e1e8f0";
+      $('.pushpin').pushpin();
+      $('.carousel').carousel();
+      $('.scrollspy').scrollSpy();
+      $('.chips').material_chip();
+      $('.materialboxed').materialbox();
+      $('.parallax').parallax();
+      $('.preloader-background').delay(1700).fadeOut('slow');
 
+      $('.preloader-wrapper')
+        .delay(1700)
+        .fadeOut();
+      $('.datepicker').pickadate({
+        selectMonths: true,
+        selectYears: 15,
+        closeOnSelect: true
+      });
+
+      /*$(window).scroll(function(){
+            if($(window).scrollTop()>600){
+              $('#header').removeClass('translucent').addClass('black');
+            }else{
+              $('#header').addClass('black');
+            }
+          });*/
+      var options = [
+        {
+          selector: '#product-header', offset: 500, callback: function (el) {
+            Materialize.fadeInImage('#product-header');
+          }
+        },
+        {
+          selector: '#customers-header', offset: 500, callback: function (el) {
+            Materialize.fadeInImage('#customers-header');
+          }
+        },
+        {
+          selector: '#customers-header', offset: 530, callback: function (el) {
+            Materialize.showStaggeredList('#customers1-header');
+          }
+        },
+        {
+          selector: '#customers-header', offset: 560, callback: function (el) {
+            Materialize.showStaggeredList('#customers2-header');
+          }
+        },
+        {
+          selector: '#customers-header', offset: 590, callback: function (el) {
+            Materialize.showStaggeredList('#customers3-header');
+          }
+        },
+
+
+
+
+      ];
+      Materialize.scrollFire(options);
 
     });
+
+
   /*
     CKEDITOR.replace('body',{
       plugins: 'wysiwygarea,toolbar,basicstyles,link'
     });*/
   </script>
 </body>
+
 </html>

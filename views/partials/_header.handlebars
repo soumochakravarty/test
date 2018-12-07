@@ -1,14 +1,12 @@
-<nav class="cyan darken-3">
-  <div class="container">
+<nav class="cyan darken-3 nav-extended">
     <div class="nav-wrapper">
       {{#if (equal session.email "admin@admin.com")}}
-        <a href="/userdetail" class="brand-logo center">Call System</a>
+        <a href="/userdetail" class="brand-logo center">Service Call Plus</a>
         {{else}}
-        <a href="/dashboard" class="brand-logo center">Call System</a>
+         <a href="/dashboard" class="brand-logo center"><img class="responsive-img" id="logo" src="../images/Logo.png"/></a>
       {{/if}}
-      
       {{#if session.email}}
-       <a href="#" data-activates="main-menu" class="button-collapse show-on-large"><i class="fa fa-bars"></i></a>
+       <a data-activates="main-menu" class="button-collapse show-on-large"><i class="fa fa-bars"></i></a>
       {{/if}}
       <!-- RIGHT NAV -->
       <ul class="right hide-on-small-only">
@@ -20,6 +18,7 @@
         {{/if}}
         <li><a href="/users/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
         {{/if}}
+
       </ul>
       <!-- SIDE MENU -->
       <ul class="side-nav cyan darken-3" id="main-menu">
@@ -35,6 +34,7 @@
         {{else}}
         <li><a href="/dashboard" class="white-text"> <i class="fa fa-bar-chart"></i>  Dashboard </a></li>
         <li><a href="/setup" class="white-text"><i class="fa fa-cog"></i> Setup Tables </a></li>
+        <li><a href="/cancel" class="white-text"><i class="fa fa-ban"></i> Cancel Calls </a></li>
         <li><a href="/history" class="white-text">Download Records<i class="fa fa-download"></i></a></li>
         <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
@@ -45,8 +45,6 @@
                 <li><a href="/daily" class="white-text">Daily<i class="fa fa-minus"></i></a></li>
                 <li><a href="/weekly" class="white-text">Weekly<i class="fa fa-minus"></i></a></li>
                 <li><a href="/monthly" class="white-text">Monthly<i class="fa fa-minus"></i></a></li>
-           
-           
               </ul>
             </div>
           </li>
@@ -57,5 +55,6 @@
         {{/if}}
       </ul>
     </div>
-  </div>
+  <div class="nav-content">
+    </div>
 </nav>

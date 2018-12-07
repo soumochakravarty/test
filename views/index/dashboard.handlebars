@@ -15,6 +15,7 @@
      google.charts.setOnLoadCallback(drawReasonChart);
 
      google.charts.setOnLoadCallback(drawWaiterTable);
+     google.charts.setOnLoadCallback(drawCallTable);
 
      google.charts.setOnLoadCallback(drawChart);
     // Draw the Bar chart for Wait time
@@ -33,9 +34,10 @@
       var options = {'title':'Wait Time Dashboard:',
                       
                      //'width':700,
-                      //'height':400,
+                      //'height':300,
                     //chartArea:{height:'80%'},
-                     hAxis:{title:'Tables'}, 
+                     
+                     hAxis:{title:'Tables',textPosition:'in',slantedText:true, slantedTextAngle:90 }, 
                      vAxis: {
                         //title:'Time',
                         //viewWindowMode: 'explicit',
@@ -116,11 +118,14 @@ function drawReasonChart() {
       // Instantiate and draw our chart, passing in some options.
       var chart = new google.visualization.PieChart(document.getElementById('chart_request_div'));
       var waiterchart_options = {title:'Service Type Distribution:',
-                      pieSliceText: 'label',
+                      pieSliceText: 'value',
                       backgroundColor: '#e1e8f0',
                        //width:400,
                        //height:300,
-                       legend: 'none'};
+                       width:500,
+                       height:500,
+                       is3D: true
+                       };
       if ( jsonData == ""){
          waiterchart_options = {  
         width: '0%', height: '0%',
@@ -175,6 +180,43 @@ function drawWaiterTable() {
  
      setTimeout(drawWaiterTable,10000);
 }
+
+function drawCallTable() {
+  var jsonData = $.ajax({
+          url: "/api/calldetails",
+          dataType: "json",
+          async: false
+          }).responseText;
+     //document.write(jsonData);
+      // Create our data table out of JSON data loaded from server.
+      
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.Table(document.getElementById('table_call_div'));
+      var cssClassNames = {
+'headerRow': 'white-font large-font bold-font purpel-background black-border',
+'tableRow': 'black-border',
+'oddTableRow': 'beige-background',
+'selectedTableRow': 'large-font',
+'hoverTableRow': '',
+'headerCell': 'black-border',
+'tableCell': 'black-border',
+};
+      var waiterchart_options = {  
+        width: '70%', height: '100%'
+        ,'cssClassNames': cssClassNames
+                     };
+      if ( jsonData == ""){
+         waiterchart_options = {  
+        width: '0%', height: '0%'
+                     };
+      }
+      chart.draw(data, waiterchart_options);
+
+ 
+     setTimeout(drawCallTable,10000);
+}
     </script>
   <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -182,14 +224,16 @@ function drawWaiterTable() {
   <body>
 <h1></h1>
 <center><h3 class="gen-h1" >Dashboard</h3></center>
-<div id="table_waiter_div"></div>
+<div id="table_call_div"></div>
   <h3></h3>
     <!--<div id="chart_div"></div>-->
     <div class="chartwrapper">
         <div id="chart_div" class="chartdiv z-depth-5"></div>
       </div>
 <h1></h1>
-        <div class="link" id="chart_waiter_div" ></div>
-        <div class="link" id="chart_request_div" ></div>
+       <!-- <div class="link" id="chart_waiter_div" ></div> -->
+<div id="chart_request_div" ></div>
+    <!-- <div id="table_waiter_div"></div> -->
+  <h3></h3>
 </body>
 </html>

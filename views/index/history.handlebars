@@ -1,22 +1,24 @@
-<center><h3 class="gen-h1" >History Date</h3></center>
+<center>
+  <h3 class="gen-h1">History Date</h3>
+</center>
 <div class="row">
   <form action="/api/history" method="post" class="col s12">
 
-        <div class="col s12">
-         <h5 class="blue-text text-darken-2"><i class="fa fa-calendar"></i>  <b>Start date:</b></h5>
-        <div class="input-field inline">
-            <input type="date" class="validate" name="sdate">
-            <label for="sdate" data-error="Incorrect Date" ></label>
-        </div>
+    <div class="col s12">
+      <h5 class="blue-text text-darken-2"><i class="fa fa-calendar"></i> <b>Start date:</b></h5>
+      <div class="input-field inline">
+        <input type="date" class="validate" name="sdate">
+        <label for="sdate" data-error="Incorrect Date"></label>
+      </div>
 
-    <div class="row">
+      <div class="row">
         <div class="col s12">
-          <h5 class="blue-text text-darken-2"><i class="fa fa-calendar"></i>  <b>End date:</b></h5>
+          <h5 class="blue-text text-darken-2"><i class="fa fa-calendar"></i> <b>End date:</b></h5>
           <div class="input-field inline">
             <input type="date" class="validate" name="edate">
-            <label for="edate" data-error="Incorrect Date" ></label>
+            <label for="edate" data-error="Incorrect Date"></label>
           </div>
-    </div>
-    <input type="submit" value="Download" class="btn green accent-4 z-depth-3">
+        </div>
+        <input type="submit" value="Download" class="waves-effect waves-red btn green accent-4 z-depth-3">
   </form>
 </div>

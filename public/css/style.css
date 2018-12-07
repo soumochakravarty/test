@@ -1,9 +1,8 @@
 .link {
-    width: 50%;
-    height: 50%;
-    float: left;
-    text-align: center;
-
+  width: 50%;
+  height: 50%;
+  float: left;
+  text-align: center;
 }
 .chartwrapper {
   width: 80%;
@@ -28,104 +27,189 @@ main {
   flex: 1 0 auto;
 }
 
-.nav-wrapper .fa-bars{
-  font-size:25px;
+.nav-wrapper .fa-bars {
+  font-size: 25px;
 }
 
-footer{
-  margin-top:20px;
+footer {
+  margin-top: 20px;
 }
 
 .orange-background {
   background-color: orange;
- }
+}
 
 .grey-background {
- background-color: grey;
+  background-color: grey;
 }
 
 .beige-background {
-background-color: beige;
- }
+  background-color: beige;
+}
 
- .purpel-background {
+.purpel-background {
   background-color: purple;
-   }
+}
 
-   .bold-green-font {
-    font-weight: bold;
-    color: green;
-  }
+.bold-green-font {
+  font-weight: bold;
+  color: green;
+}
 
-  .bold-font {
-    font-weight: bold;
-  }
+.bold-font {
+  font-weight: bold;
+}
 
-  .right-text {
-    text-align: right;
-  }
+.right-text {
+  text-align: right;
+}
 
-  .large-font {
-    font-size: 15px;
-  }
-  .white-font {
-    font-style: bold;
-    color: white;
-  }
+.large-font {
+  font-size: 15px;
+}
+.white-font {
+  font-style: bold;
+  color: white;
+}
 
-  .italic-purple-font {
-    font-style: italic;
-    color: purple;
-  }
+.italic-purple-font {
+  font-style: italic;
+  color: purple;
+}
 
-  .underline-blue-font {
-    text-decoration: underline;
-    color: blue;
-  }
+.underline-blue-font {
+  text-decoration: underline;
+  color: blue;
+}
 
-  .gold-border {
-    border: 3px solid gold;
-  }
+.gold-border {
+  border: 3px solid gold;
+}
 
-  .deeppink-border {
-    border: 3px solid deeppink;
-  }
-  .black-border {
-    border: 5px solid black;
-  }
+.deeppink-border {
+  border: 3px solid deeppink;
+}
+.black-border {
+  border: 5px solid black;
+}
 
 .main-h1 {
-    margin: 1em 0 0.5em 0;
-    font-weight: 600;
-    font-family: 'Titillium Web', sans-serif;
-    position: relative;  
-    font-size: 36px;
-    line-height: 40px;
-    padding: 15px 15px 15px 15%;
-    color: black;
-    box-shadow: 
-      inset 0 0 0 1px rgba(53,86,129, 0.4), 
-      inset 0 0 5px rgba(53,86,129, 0.5);
-    border-radius: 0 10px 0 10px;
-    background: url(../images/heading.jpg) repeat center;
-  }
+  margin: 1em 0 0.5em 0;
+  font-weight: 600;
+  font-family: 'Titillium Web', sans-serif;
+  position: relative;
+  font-size: 36px;
+  line-height: 40px;
+  padding: 15px 15px 15px 15%;
+  color: black;
+  box-shadow: inset 0 0 0 1px rgba(53, 86, 129, 0.4),
+    inset 0 0 5px rgba(53, 86, 129, 0.5);
+  border-radius: 0 10px 0 10px;
+  background: url(../images/heading.jpg) repeat center;
+}
 
-  .gen-h1 {
-    margin: 1em 0 0.5em 0;
-    font-weight: 600;
-    font-family: 'Titillium Web', sans-serif;
-    position: relative;  
-    font-size: 36px;
-    line-height: 40px;
-    padding: 15px 15px 15px 15%;
-    color: whitesmoke;
-    box-shadow: 
-      inset 0 0 0 1px rgba(53,86,129, 0.4), 
-      inset 0 0 5px rgba(53,86,129, 0.5);
-    border-radius: 0 10px 0 10px;
-    background: url(../images/main.jpg) repeat center;
-  }
-  .logo{
-    width:130px;
-    margin:auto;
-  }
+.gen-h1 {
+  margin: 1em 0 0.5em 0;
+  font-weight: 600;
+  font-family: 'Titillium Web', sans-serif;
+  position: relative;
+  font-size: 36px;
+  line-height: 40px;
+  padding: 15px 15px 15px 15%;
+  color: whitesmoke;
+  box-shadow: inset 0 0 0 1px rgba(53, 86, 129, 0.4),
+    inset 0 0 5px rgba(53, 86, 129, 0.5);
+  border-radius: 0 10px 0 10px;
+  background: url(../images/main.jpg) repeat center;
+}
+.logo {
+  width: 130px;
+  margin: auto;
+}
+
+.subheader h5 {
+  font: 50px 'Arial Narrow', sans-serif; /* I picked this font because it's the closest looking 'web safe' font http://cssfontstack.com/ */
+  color: black;
+  letter-spacing: -4px;
+  text-rendering: optimizeLegibility;
+}
+
+.subheader h4 {
+  margin: 1em 0 0.5em 0;
+  color: black;
+  font-weight: normal;
+  font-family: 'Trocchi', cursive;
+  font-size: 50px;
+  line-height: 42px;
+  text-shadow: 0 2px white, 0 3px #777;
+  text-decoration: underline;
+}
+
+.subheader h5:hover {
+  shadow: 10px 10px 10px #082b34;
+}
+
+.subheader a:hover {
+  color: black;
+}
+.secondary-content {
+  position: relative;
+  top: 90vh;
+  width: 100%;
+}
+.translucent {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.table-of-contents a.active {
+  border-bottom: 2px solid #ea4a4f;
+  border-left: 2px solid black;
+  color: #ea4a4f;
+}
+
+.table-of-contents a:hover {
+  border-bottom: 2px solid #ea4a4f;
+  border-left: 2px solid black;
+  color: #ea4a4f;
+}
+.table-of-contents a {
+  color: white;
+  font-weight: 500;
+  padding-left: 18px;
+}
+
+.slider .btn {
+  margin-top: 20px;
+}
+
+.section-follow .fa-4x {
+  margin: 5px 10px;
+}
+
+.section-contact h5 {
+  margin-bottom: 30px;
+}
+
+.preloader-background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.section-developers {
+  position: relative;
+  background: url(../images/code.jpg);
+  background-size: cover;
+  background-position: center;
+  border-top: #333 solid 5px;
+  border-bottom: #333 solid 5px;
+  min-height: 160px;
+}
