@@ -1,29 +1,30 @@
 <h1></h1>
 <div class="col s2 m2 l1">
-    <div class="card horizontal z-depth-5 white s2 m2 l1">
-      <div class="card-image col s1 m1">
-        <img src="../images/avatar.png">
-      </div>
-      <div class="card-stacked s2 m2 l1">
-<form action="/users/login" method="post" >
-  <div class="card-content col s1 m1">
-    <div class="row">
-       <div class="input-field" >
-        <input type="email" name="email" class="validate" required="" aria-required="true">
-        <label for="email" data-error="Incorrect Email" class="blue-text text-darken-2"><i class="fa fa-sign-in"></i>   <b>Email Id</b></label>
-      </div>
+  <div class="card horizontal z-depth-5 white s2 m2 l1">
+    <div class="card-image col s1 m1">
+      <img src="../images/avatar.png">
     </div>
-    <div class="row">
-      <div class="input-field" >
-        <input type="password" name="password">
-        <label for="password" class="blue-text text-darken-2"><i class="fa fa-unlock-alt"></i>  <b>Password</b></label>
-      </div>
-    </div>
+    <div class="card-stacked s2 m2 l1">
+      <form action="/users/login" method="post">
+        <div class="card-content col s1 m1">
+          <div class="row">
+            <div class="input-field">
+              <input type="text" name="email" class="validate" required="" aria-required="true">
+              <label for="email" data-error="Incorrect User ID" class="blue-text text-darken-2"><i class="fa fa-sign-in"></i>
+                <b>User Id</b></label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field">
+              <input type="password" name="password">
+              <label for="password" class="blue-text text-darken-2"><i class="fa fa-unlock-alt"></i> <b>Password</b></label>
+            </div>
+          </div>
         </div>
         <div class="card-action">
-        <input type="submit" value="Login" class="waves-effect waves-red btn green accent-4 z-depth-3">
+          <input type="submit" value="Login" class="waves-effect waves-red btn green accent-4 z-depth-3">
         </div>
-      </div>
-    </form>
     </div>
+    </form>
   </div>
+</div>

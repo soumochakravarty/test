@@ -1,239 +1,306 @@
-<html> 
-  <head>
-    <!--Load the AJAX API-->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script type="text/javascript">
+<html>
+
+<head>
+  <!--Load the AJAX API-->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript">
 
     // Load the Visualization API and the piechart package.
-    google.charts.load('current', {'packages':['corechart','table']});
-    
-     // Draw the pie chart for Waiter.
-     google.charts.setOnLoadCallback(drawWaiterChart);
+    google.charts.load('current', { 'packages': ['corechart', 'table'] });
+
+    // Draw the pie chart for Waiter.
+    google.charts.setOnLoadCallback(drawWaiterChart);
 
     // Draw the pie chart for Reason.
-     google.charts.setOnLoadCallback(drawReasonChart);
+    google.charts.setOnLoadCallback(drawReasonChart);
 
-     google.charts.setOnLoadCallback(drawWaiterTable);
-     google.charts.setOnLoadCallback(drawCallTable);
+    google.charts.setOnLoadCallback(drawWaiterTable);
+    google.charts.setOnLoadCallback(drawCallTable);
 
-     google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(drawChart);
     // Draw the Bar chart for Wait time
     function drawChart() {
       var jsonData = $.ajax({
-          url: "/api/hoteltoken",
-          dataType: "json",
-          async: false
-          }).responseText;
-     //document.write(jsonData);
+        url: "/api/hoteltoken",
+        dataType: "json",
+        async: false
+      }).responseText;
+      //document.write(jsonData);
       // Create our data table out of JSON data loaded from server.
       var data = new google.visualization.DataTable(jsonData);
 
       // Instantiate and draw our chart, passing in some options.
       var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-      var options = {'title':'Wait Time Dashboard:',
-                      
-                     //'width':700,
-                      //'height':300,
-                    //chartArea:{height:'80%'},
-                     
-                     hAxis:{title:'Tables',textPosition:'in',slantedText:true, slantedTextAngle:90 }, 
-                     vAxis: {
-                        //title:'Time',
-                        //viewWindowMode: 'explicit',
-                        viewWindow: {
-                            max: 15 }} ,
-                     legend: { position: "none" },
-                     bar: { groupWidth: '10' },
-                    backgroundColor: '#e1e8f0',
-                     //bars: 'horizontal',
-                     isStacked: true
+      var options = {
+        'title': 'Wait Time Dashboard:',
 
-                     };
-        /*if ( jsonData == ""){ 
-         options = {  
-        width: 1, height: 0,
-        legend: { position: "none" }
-                     };         
+        //'width':700,
+        //'height':300,
+        //chartArea:{height:'80%'},
 
-      data.addColumn('string', 'hhhj');
-      data.addColumn('number', ' ');
-      data.addRows([
-        [' ', 0],
-        [' ', 0]
-      ]);
-      }*/
+        hAxis: { title: 'Tables', textPosition: 'in', slantedText: true, slantedTextAngle: 90 },
+        vAxis: {
+          //title:'Time',
+          //viewWindowMode: 'explicit',
+          viewWindow: {
+            max: 15
+          }
+        },
+        legend: { position: "none" },
+        bar: { groupWidth: '10' },
+        backgroundColor: '#e1e8f0',
+        //bars: 'horizontal',
+        isStacked: true
+
+      };
+      /*if ( jsonData == ""){ 
+       options = {  
+      width: 1, height: 0,
+      legend: { position: "none" }
+                   };         
+
+    data.addColumn('string', 'hhhj');
+    data.addColumn('number', ' ');
+    data.addRows([
+      [' ', 0],
+      [' ', 0]
+    ]);
+    }*/
       chart.draw(data, options);
-      setTimeout(drawChart,10000);
+      setTimeout(drawChart, 10000);
     }
 
 
-function drawWaiterChart() {
-  var jsonData = $.ajax({
-          url: "/api/waiter",
-          dataType: "json",
-          async: false
-          }).responseText;
-     //document.write(jsonData);
+    function drawWaiterChart() {
+      var jsonData = $.ajax({
+        url: "/api/waiter",
+        dataType: "json",
+        async: false
+      }).responseText;
+      //document.write(jsonData);
       // Create our data table out of JSON data loaded from server.
       var data = new google.visualization.DataTable(jsonData);
 
       // Instantiate and draw our chart, passing in some options.
       var chart = new google.visualization.PieChart(document.getElementById('chart_waiter_div'));
-      var waiterchart_options = {title:'Open Call Distribution:',
-                        pieSliceText: 'label',
-                        backgroundColor: '#e1e8f0',
-                       //width:400,
-                       //height:300,
-                       legend: 'none'}; 
-           if ( jsonData == ""){
-         waiterchart_options = {  
-        width: '0%', height: '0%' ,
+      var waiterchart_options = {
+        title: 'Open Call Distribution:',
+        pieSliceText: 'label',
         backgroundColor: '#e1e8f0',
-                     };
-      data.addColumn('string', ' ');
-      data.addColumn('number', ' ');
-      data.addRows([
-        [' ', 0],
-        [' ', 0]
-      ]);
+        //width:400,
+        //height:300,
+        legend: 'none'
+      };
+      if (jsonData == "") {
+        waiterchart_options = {
+          width: '0%', height: '0%',
+          backgroundColor: '#e1e8f0',
+        };
+        data.addColumn('string', ' ');
+        data.addColumn('number', ' ');
+        data.addRows([
+          [' ', 0],
+          [' ', 0]
+        ]);
       }
       chart.draw(data, waiterchart_options);
-      
-     setTimeout(drawWaiterChart,10000);
 
-}
+      setTimeout(drawWaiterChart, 10000);
 
-function drawReasonChart() {
-  var jsonData = $.ajax({
-          url: "/api/request",
-          dataType: "json",
-          async: false
-          }).responseText;
-     //document.write(jsonData);
+    }
+
+    function drawReasonChart() {
+      var jsonData = $.ajax({
+        url: "/api/request",
+        dataType: "json",
+        async: false
+      }).responseText;
+      //document.write(jsonData);
       // Create our data table out of JSON data loaded from server.
-      
-      var data = new google.visualization.DataTable(jsonData);
 
+      var data = new google.visualization.DataTable(jsonData);
+      var number_request = data.getNumberOfRows();
+      var request_1;
+      var request_2;
+      // document.write(number_request);
+      //document.write(request_1);
+      //document.write(request_2);
+      var waiterchart_options;
+      waiterchart_options = {
+        title: 'Service Type Distribution:',
+        pieSliceText: 'value',
+        backgroundColor: '#e1e8f0',
+        slices: [{ color: '#006400' }, { color: '#FFD700' }, { color: '#191970' }],
+        width: 500,
+        height: 500,
+        is3D: true
+      };
+
+      if (number_request == 2) {
+        request_1 = data.getValue(0, 0);
+        request_2 = data.getValue(1, 0);
+        if (request_1 == 'Call' && request_2 == 'Drink') {
+          waiterchart_options = {
+            title: 'Service Type Distribution:',
+            pieSliceText: 'value',
+            backgroundColor: '#e1e8f0',
+            slices: [{ color: '#FFD700' }, { color: '#191970' }],
+            width: 500,
+            height: 500,
+            is3D: true
+          };
+        }
+        else if (request_1 == 'Bill' && request_2 == 'Drink') {
+          waiterchart_options = {
+            title: 'Service Type Distribution:',
+            pieSliceText: 'value',
+            backgroundColor: '#e1e8f0',
+            slices: [{ color: '#006400' }, { color: '#191970' }],
+            width: 500,
+            height: 500,
+            is3D: true
+          };
+        }
+      }
+      if (number_request == 1) {
+        request_1 = data.getValue(0, 0);
+        if (request_1 == 'Call') {
+          waiterchart_options = {
+            title: 'Service Type Distribution:',
+            pieSliceText: 'value',
+            backgroundColor: '#e1e8f0',
+            slices: [{ color: '#FFD700' }],
+            width: 500,
+            height: 500,
+            is3D: true
+          };
+        }
+        else if (request_1 == 'Drink') {
+          waiterchart_options = {
+            title: 'Service Type Distribution:',
+            pieSliceText: 'value',
+            backgroundColor: '#e1e8f0',
+            slices: [{ color: '#191970' }],
+            width: 500,
+            height: 500,
+            is3D: true
+          };
+        }
+      }
       // Instantiate and draw our chart, passing in some options.
       var chart = new google.visualization.PieChart(document.getElementById('chart_request_div'));
-      var waiterchart_options = {title:'Service Type Distribution:',
-                      pieSliceText: 'value',
-                      backgroundColor: '#e1e8f0',
-                       //width:400,
-                       //height:300,
-                       width:500,
-                       height:500,
-                       is3D: true
-                       };
-      if ( jsonData == ""){
-         waiterchart_options = {  
-        width: '0%', height: '0%',
-        backgroundColor: '#e1e8f0',
-                     };
-      data.addColumn('string', ' ');
-      data.addColumn('number', ' ');
-      data.addRows([
-        [' ', 0],
-        [' ', 0]
-      ]);
+      if (jsonData == "") {
+        waiterchart_options = {
+          width: '0%', height: '0%',
+          backgroundColor: '#e1e8f0',
+        };
+        data.addColumn('string', ' ');
+        data.addColumn('number', ' ');
+        data.addRows([
+          [' ', 0],
+          [' ', 0]
+        ]);
       }
       chart.draw(data, waiterchart_options);
-      
-     setTimeout(drawReasonChart,10000);
 
-}
+      setTimeout(drawReasonChart, 10000);
 
-function drawWaiterTable() {
-  var jsonData = $.ajax({
-          url: "/api/waitertable",
-          dataType: "json",
-          async: false
-          }).responseText;
-     //document.write(jsonData);
+    }
+
+    function drawWaiterTable() {
+      var jsonData = $.ajax({
+        url: "/api/waitertable",
+        dataType: "json",
+        async: false
+      }).responseText;
+      //document.write(jsonData);
       // Create our data table out of JSON data loaded from server.
-      
+
       var data = new google.visualization.DataTable(jsonData);
 
       // Instantiate and draw our chart, passing in some options.
       var chart = new google.visualization.Table(document.getElementById('table_waiter_div'));
       var cssClassNames = {
-'headerRow': 'white-font large-font bold-font purpel-background black-border',
-'tableRow': 'black-border',
-'oddTableRow': 'beige-background',
-'selectedTableRow': 'large-font',
-'hoverTableRow': '',
-'headerCell': 'black-border',
-'tableCell': 'black-border',
-};
-      var waiterchart_options = {  
+        'headerRow': 'white-font large-font bold-font purpel-background black-border',
+        'tableRow': 'black-border',
+        'oddTableRow': 'beige-background',
+        'selectedTableRow': 'large-font',
+        'hoverTableRow': '',
+        'headerCell': 'black-border',
+        'tableCell': 'black-border',
+      };
+      var waiterchart_options = {
         width: '70%', height: '100%'
-        ,'cssClassNames': cssClassNames
-                     };
-      if ( jsonData == ""){
-         waiterchart_options = {  
-        width: '0%', height: '0%'
-                     };
+        , 'cssClassNames': cssClassNames
+      };
+      if (jsonData == "") {
+        waiterchart_options = {
+          width: '0%', height: '0%'
+        };
       }
       chart.draw(data, waiterchart_options);
 
- 
-     setTimeout(drawWaiterTable,10000);
-}
 
-function drawCallTable() {
-  var jsonData = $.ajax({
-          url: "/api/calldetails",
-          dataType: "json",
-          async: false
-          }).responseText;
-     //document.write(jsonData);
+      setTimeout(drawWaiterTable, 10000);
+    }
+
+    function drawCallTable() {
+      var jsonData = $.ajax({
+        url: "/api/calldetails",
+        dataType: "json",
+        async: false
+      }).responseText;
+      //document.write(jsonData);
       // Create our data table out of JSON data loaded from server.
-      
+
       var data = new google.visualization.DataTable(jsonData);
 
       // Instantiate and draw our chart, passing in some options.
       var chart = new google.visualization.Table(document.getElementById('table_call_div'));
       var cssClassNames = {
-'headerRow': 'white-font large-font bold-font purpel-background black-border',
-'tableRow': 'black-border',
-'oddTableRow': 'beige-background',
-'selectedTableRow': 'large-font',
-'hoverTableRow': '',
-'headerCell': 'black-border',
-'tableCell': 'black-border',
-};
-      var waiterchart_options = {  
+        'headerRow': 'white-font large-font bold-font purpel-background black-border',
+        'tableRow': 'black-border',
+        'oddTableRow': 'beige-background',
+        'selectedTableRow': 'large-font',
+        'hoverTableRow': '',
+        'headerCell': 'black-border',
+        'tableCell': 'black-border',
+      };
+      var waiterchart_options = {
         width: '70%', height: '100%'
-        ,'cssClassNames': cssClassNames
-                     };
-      if ( jsonData == ""){
-         waiterchart_options = {  
-        width: '0%', height: '0%'
-                     };
+        , 'cssClassNames': cssClassNames
+      };
+      if (jsonData == "") {
+        waiterchart_options = {
+          width: '0%', height: '0%'
+        };
       }
       chart.draw(data, waiterchart_options);
 
- 
-     setTimeout(drawCallTable,10000);
-}
-    </script>
+
+      setTimeout(drawCallTable, 10000);
+    }
+  </script>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 
-  <body>
-<h1></h1>
-<center><h3 class="gen-h1" >Dashboard</h3></center>
-<div id="table_call_div"></div>
+<body>
+  <h1></h1>
+  <center>
+    <h3 class="gen-h1">Dashboard</h3>
+  </center>
+  <div id="table_call_div"></div>
   <h3></h3>
-    <!--<div id="chart_div"></div>-->
-    <div class="chartwrapper">
-        <div id="chart_div" class="chartdiv z-depth-5"></div>
-      </div>
-<h1></h1>
-       <!-- <div class="link" id="chart_waiter_div" ></div> -->
-<div id="chart_request_div" ></div>
-    <!-- <div id="table_waiter_div"></div> -->
+  <!--<div id="chart_div"></div>-->
+  <div class="chartwrapper">
+    <div id="chart_div" class="chartdiv z-depth-5"></div>
+  </div>
+  <h1></h1>
+  <!-- <div class="link" id="chart_waiter_div" ></div> -->
+  <div id="chart_request_div"></div>
+  <!-- <div id="table_waiter_div"></div> -->
   <h3></h3>
 </body>
+
 </html>

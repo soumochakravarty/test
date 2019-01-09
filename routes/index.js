@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-var {authenticate} = require('../middleware/authenticate');
+var { authenticate } = require('../middleware/authenticate');
 var Hoteltoken = require('../config/hoteltokenCon');
 var Hoteltoken1 = require('../config/hoteltokenCon');
 var Hoteltoken2 = require('../config/hoteltokenCon');
@@ -10,29 +10,35 @@ router.get('/login', (req, res) => {
   res.render('index/login');
 });
 
+router.get('/login_error', (req, res) => {
+  res.render('index/login_error');
+});
+
 router.get('/', (req, res) => {
-  var url=req.originalUrl;
-  res.render('index/home_new',{url:url});
+  var url = req.originalUrl;
+  res.render('index/home', { url: url });
 });
 
 router.get('/home_thankyou', (req, res) => {
-  var url=req.originalUrl;
-  res.render('index/home_thankyou',{url:url});
+  var url = req.originalUrl;
+  res.render('index/home_thankyou', { url: url });
 });
 
 router.get('/product', (req, res) => {
-  var url=req.originalUrl;
-  res.render('index/product',{url:url});
+  var url = req.originalUrl;
+  res.render('index/product', { url: url });
 });
-
 
 router.get('/about', (req, res) => {
   res.render('index/about');
 });
 
-
 router.get('/thankyou', authenticate, (req, res) => {
   res.render('index/thankyou');
+});
+
+router.get('/error', authenticate, (req, res) => {
+  res.render('index/error');
 });
 
 router.get('/dashboard', authenticate, (req, res) => {
@@ -53,140 +59,189 @@ router.get('/history', authenticate, (req, res) => {
 });
 
 router.get('/cancel', authenticate, (req, res) => {
-  var call_no =[];
-  Hoteltoken.query("SELECT tid , TIMESTAMPDIFF(MINUTE,start_time,NOW()) as wait_time FROM Hoteltoken WHERE request !='CANCEL' and restaurant='"+sess.restaurant+"' ORDER BY wait_time DESC;",
-  function(err, rows) {
-    if(err) throw err;
-    var length = rows.length;
-     for( var i = 0 ; i<length ; i++){
-      call_no[i]= rows[i];
-     }
-      res.render('index/cancel',{call_no:call_no});
-    });
+  var call_no = [];
+  Hoteltoken.query(
+    "SELECT tid , TIMESTAMPDIFF(MINUTE,start_time,NOW()) as wait_time FROM Hoteltoken WHERE request !='CANCEL' and restaurant='" +
+      sess.restaurant +
+      "' ORDER BY wait_time DESC;",
+    function(err, rows) {
+      if (err) throw err;
+      var table_albha;
+      var length = rows.length;
+      for (var i = 0; i < length; i++) {
+        table_albha = rows[i].tid;
+        if (table_albha >= 1000 && table_albha < 2000) {
+          table_albha = 'A' + (table_albha % 1000);
+        } else if (table_albha >= 2000 && table_albha < 3000) {
+          table_albha = 'B' + (table_albha % 1000);
+        } else if (table_albha >= 3000 && table_albha < 4000) {
+          table_albha = 'C' + (table_albha % 1000);
+        } else if (table_albha >= 4000 && table_albha < 5000) {
+          table_albha = 'D' + (table_albha % 1000);
+        } else if (table_albha >= 5000 && table_albha < 6000) {
+          table_albha = 'E' + (table_albha % 1000);
+        } else {
+          table_albha = rows[i].tid;
+        }
+        rows[i].tid = table_albha;
+        call_no[i] = rows[i];
+      }
+      res.render('index/cancel', { call_no: call_no });
+    }
+  );
 });
 
-
 router.get('/devicestp', authenticate, (req, res) => {
-  var restaurant =[];
-  Hoteltoken.query("SELECT DISTINCT restaurant FROM device_lookup;",
-  function(err, rows) {
-      if(err) throw err;
+  var restaurant = [];
+  Hoteltoken.query('SELECT DISTINCT restaurant FROM device_lookup;', function(
+    err,
+    rows
+  ) {
+    if (err) throw err;
     var length = rows.length;
-     for( var i = 0 ; i<length ; i++){
-      restaurant[i]= rows[i];
-     }
-      res.render('index/devicestp',{restaurant:restaurant});
-    });
-  
+    for (var i = 0; i < length; i++) {
+      restaurant[i] = rows[i];
+    }
+    res.render('index/devicestp', { restaurant: restaurant });
+  });
 });
 
 router.get('/dailyanz', authenticate, (req, res) => {
-  var daily =[];
-  var weekly =[];
-  var monthly =[];
-  sess=req.session;
-  Hoteltoken.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 1 GROUP BY waiter ORDER BY WAIT_TIME;",
-  function(err, rows) {
-      if(err) throw err;
-    var length = rows.length;
-     for( var i = 0 ; i<length ; i++){
-      daily[i]= rows[i];
-    }
-  Hoteltoken1.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 8 GROUP BY waiter ORDER BY WAIT_TIME;",
-      function(err, rows) {
-          if(err) throw err;
-        var length = rows.length;
-         for( var i = 0 ; i<length ; i++){
-          weekly[i]= rows[i];
-        }
-  Hoteltoken2.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 32 GROUP BY waiter ORDER BY WAIT_TIME;",
+  var daily = [];
+  var weekly = [];
+  var monthly = [];
+  sess = req.session;
+  Hoteltoken.query(
+    "SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='" +
+      sess.restaurant +
+      "' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 1 GROUP BY waiter ORDER BY WAIT_TIME;",
+    function(err, rows) {
+      if (err) throw err;
+      var length = rows.length;
+      for (var i = 0; i < length; i++) {
+        daily[i] = rows[i];
+      }
+      Hoteltoken1.query(
+        "SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='" +
+          sess.restaurant +
+          "' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 8 GROUP BY waiter ORDER BY WAIT_TIME;",
         function(err, rows) {
-              if(err) throw err;
-            var length = rows.length;
-             for( var i = 0 ; i<length ; i++){
-          monthly[i]= rows[i];}
-  res.render('index/dailyanz',{daily:daily,weekly:weekly,monthly:monthly});
+          if (err) throw err;
+          var length = rows.length;
+          for (var i = 0; i < length; i++) {
+            weekly[i] = rows[i];
+          }
+          Hoteltoken2.query(
+            "SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='" +
+              sess.restaurant +
+              "' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 32 GROUP BY waiter ORDER BY WAIT_TIME;",
+            function(err, rows) {
+              if (err) throw err;
+              var length = rows.length;
+              for (var i = 0; i < length; i++) {
+                monthly[i] = rows[i];
+              }
+              res.render('index/dailyanz', {
+                daily: daily,
+                weekly: weekly,
+                monthly: monthly
               });
-          });    
-      });
+            }
+          );
+        }
+      );
+    }
+  );
 });
 
 router.get('/daily', authenticate, (req, res) => {
-  var daily =[];
-  sess=req.session;
-  Hoteltoken.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 1 GROUP BY waiter ORDER BY WAIT_TIME;",
-  function(err, rows) {
-      if(err) throw err;
-    var length = rows.length;
-     for( var i = 0 ; i<length ; i++){
-      daily[i]= rows[i];
-    }
-  
-  res.render('index/daily',{daily:daily});
-              });
-          });    
+  var daily = [];
+  sess = req.session;
+  Hoteltoken.query(
+    "SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='" +
+      sess.restaurant +
+      "' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 1 GROUP BY waiter ORDER BY WAIT_TIME;",
+    function(err, rows) {
+      if (err) throw err;
+      var length = rows.length;
+      for (var i = 0; i < length; i++) {
+        daily[i] = rows[i];
+      }
 
+      res.render('index/daily', { daily: daily });
+    }
+  );
+});
 
 router.get('/weekly', authenticate, (req, res) => {
-  var weekly =[];
-  sess=req.session;
-  Hoteltoken1.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 8 GROUP BY waiter ORDER BY WAIT_TIME;",
-      function(err, rows) {
-          if(err) throw err;
-        var length = rows.length;
-         for( var i = 0 ; i<length ; i++){
-          weekly[i]= rows[i];
-        }
-  res.render('index/weekly',{weekly:weekly});
-              });
-          });    
-
+  var weekly = [];
+  sess = req.session;
+  Hoteltoken1.query(
+    "SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='" +
+      sess.restaurant +
+      "' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 8 GROUP BY waiter ORDER BY WAIT_TIME;",
+    function(err, rows) {
+      if (err) throw err;
+      var length = rows.length;
+      for (var i = 0; i < length; i++) {
+        weekly[i] = rows[i];
+      }
+      res.render('index/weekly', { weekly: weekly });
+    }
+  );
+});
 
 router.get('/monthly', authenticate, (req, res) => {
-  var monthly =[];
-  sess=req.session;
-  Hoteltoken2.query("SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='"+sess.restaurant+"' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 32 GROUP BY waiter ORDER BY WAIT_TIME;",
-        function(err, rows) {
-              if(err) throw err;
-            var length = rows.length;
-             for( var i = 0 ; i<length ; i++){
-          monthly[i]= rows[i];}
-  res.render('index/monthly',{monthly:monthly});
-              });
-          });    
-
+  var monthly = [];
+  sess = req.session;
+  Hoteltoken2.query(
+    "SELECT waiter, AVG(wait_time) AS WAIT_TIME , COUNT(*) AS CALLS FROM history WHERE restaurant='" +
+      sess.restaurant +
+      "' and TIMESTAMPDIFF(DAY,start_time,NOW()) < 32 GROUP BY waiter ORDER BY WAIT_TIME;",
+    function(err, rows) {
+      if (err) throw err;
+      var length = rows.length;
+      for (var i = 0; i < length; i++) {
+        monthly[i] = rows[i];
+      }
+      res.render('index/monthly', { monthly: monthly });
+    }
+  );
+});
 
 router.get('/updtable', authenticate, (req, res) => {
   res.render('index/updtable');
 });
 
 router.get('/userdetail', authenticate, (req, res) => {
-  var users =[];
-  Hoteltoken.query("SELECT email,restaurant FROM `user` WHERE email !='admin@admin.com' ORDER BY restaurant",
-  function(err, rows) {
-      if(err) throw err;
-    var length = rows.length;
-     for( var i = 0 ; i<length ; i++){
-      users[i]= rows[i];
+  var users = [];
+  Hoteltoken.query(
+    "SELECT email,restaurant FROM `user` WHERE email !='admin@admin.com' ORDER BY restaurant",
+    function(err, rows) {
+      if (err) throw err;
+      var length = rows.length;
+      for (var i = 0; i < length; i++) {
+        users[i] = rows[i];
       }
-  res.render('index/userdetail',{users:users});
+      res.render('index/userdetail', { users: users });
+    }
+  );
 });
-
-});
-
 
 router.get('/setup', authenticate, (req, res) => {
-  sess=req.session;
-  var table =[];
-  Hoteltoken.query("SELECT tid FROM `Hoteltoken` WHERE restaurant ='"+sess.restaurant+"'",
-  function(err, rows) {
-      if(err) throw err;
+  sess = req.session;
+  var table = [];
+  Hoteltoken.query(
+    "SELECT tid FROM `Hoteltoken` WHERE restaurant ='" + sess.restaurant + "'",
+    function(err, rows) {
+      if (err) throw err;
       var length = rows.length;
-     for( var i = 0 ; i<length ; i++){
-          table[i]= "Table " + rows[i].tid;
+      for (var i = 0; i < length; i++) {
+        table[i] = 'Table ' + rows[i].tid;
       }
-  res.render('index/setup',{table:table});
-});
+      res.render('index/setup', { table: table });
+    }
+  );
 });
 
 module.exports = router;
