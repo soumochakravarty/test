@@ -213,3 +213,23 @@ footer {
   border-bottom: #333 solid 5px;
   min-height: 160px;
 }
+
+.tabs .indicator {
+  background-color: #6a1b9a !important;
+}
+
+.section-problem {
+  position: relative;
+  background: url(../images/problem.jpg);
+  background-size: cover;
+  background-position: center;
+  border-top: #333 solid 5px;
+  border-bottom: #333 solid 5px;
+  min-height: 160px;
+}
+
+.showcase {
+  background-image: url('../images/product_page1.jpg');
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
