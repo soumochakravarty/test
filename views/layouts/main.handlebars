@@ -69,6 +69,12 @@
       $('#submit_cancel').click(function () {
         $('#formfield').submit();
       });
+      $('#submit_delete').click(function () {
+        $('#formdelete').submit();
+      });
+      $("#all").click(function () {
+        $('.item').attr('checked', this.checked);
+      });
       /*$(window).scroll(function(){
             if($(window).scrollTop()>600){
               $('#header').removeClass('translucent').addClass('black');

@@ -1,0 +1,100 @@
+<center>
+    <h3 class="gen-h1">Phone Notification</h3>
+</center>
+<!-- Delete Phone number section -->
+{{#if phone_no}}
+<div class="row">
+    <form action="/phone/delete" method="post" class="col s12" id="formdelete">
+        <div class="row">
+            <h5 class="center blue-text">Phone Number Configured :</h5>
+            {{#each phone_no}}
+
+            <p>
+                <input class="with-gap" name="{{this.phone}}" type="checkbox" id="{{this.phone}}" required=""
+                    aria-required="true" />
+                <label for="{{this.phone}}" class="black-text"> {{this.phone}} <b>Table
+                        Configured:</b> {{this.tid}}
+                </label>
+            </p>
+
+            {{/each}}
+
+            <h1></h1>
+            <a href="#md1" class="waves-effect waves-red btn green accent-4 z-depth-3 modal-trigger"> Delete Phone
+                Number ?</a>
+        </div>
+    </form>
+</div>
+<!-- Confirmation Model -->
+<div id="md1" class="modal">
+    <div class="modal-content">
+        <h4>Please Confirm</h4>
+        <p>Are you sure to proceed?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" id="submit_delete" class="modal-close waves-effect waves-red btn-flat">
+            Yes </a>
+        <a href="#" class="modal-close waves-effect waves-red btn green accent-4 z-depth-3">No</a>
+    </div>
+</div>
+{{/if}}
+<!-- Insert Phone number section -->
+<h5 class="center blue-text">Insert Phone Number for Notification:</h5>
+
+<h1></h1>
+<div class="row">
+    <form action="/phone/update" method="post" class="col s12">
+        <div class="row">
+            <div class="input-field col s6 blue-text text-darken-2">
+                <i class="material-icons prefix">phone</i>
+                <input type="text" placeholder="US Numbers only" name="phone" required="" aria-required="true">
+                <label for="phone" class="blue-text">No Country Code</label>
+            </div>
+            <div class="input-field col s6 blue-text text-darken-2">
+                <select class="icons" name="provider">
+                    <option value="" disabled selected>Choose your provider</option>
+                    <option value="@sms.alltelwireless.com" data-icon="../images/alltel.jpg" class="left circle">Alltel</option>
+                    <option value="@txt.att.net" data-icon="../images/at&t.jpg" class="left circle"> AT&T</option>
+                    <option value="@sms.myboostmobile.com" data-icon="../images/boost.jpg" class="left circle">Boost
+                        Mobile</option>
+                    <option value="@mms.cricketwireless.net" data-icon="../images/cricket.jpg" class="left circle">Cricket
+                        Wireless</option>
+                    <option value="@mymetropcs.com" data-icon="../images/metropcs.jpg" class="left circle">MetroPCS</option>
+                    <option value="@text.republicwireless.com" data-icon="../images/republic.jpg" class="left circle">Republic
+                        Wireless</option>
+                    <option value="@messaging.sprintpcs.com" data-icon="../images/sprint.jpg" class="left circle">Sprint</option>
+                    <option value="@tmomail.net" data-icon="../images/tmobile.jpg" class="left circle">T-Mobile</option>
+                    <option value="@email.uscc.net" data-icon="../images/uscellular.jpg" class="left circle">U.S.
+                        Cellular</option>
+                    <option value="@vmobl.com" data-icon="../images/virgin.jpg" class="left circle">Virgin Mobile</option>
+                    <option value="@vtext.com" data-icon="../images/verizon.jpg" class="left circle">Verizon Wireless</option>
+
+                </select>
+                <label class="blue-text text-darken-2">Provider</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <h5 class="blue-text">Select Table:</h5>
+            <div class="col s12 black-text">
+                <p>
+                    <input type="checkbox" id="all" class="filled-in" />
+                    <label for="all" class="black-text">Select All</label>
+                </p>
+            </div>
+            {{#each table}}
+            <div class="col s4 m2 blue-text">
+                <p>
+                    <input name="{{this}}" type="checkbox" id="{{this}}" class="item" />
+                    <label for="{{this}}" class="blue-text">Table {{this}}</label>
+                </p>
+            </div>
+            {{/each}}
+        </div>
+
+        <h1></h1>
+        <input type="submit" value="Set Phone Number" class="waves-effect waves-red btn green accent-4 z-depth-3">
+    </form>
+</div>
+
+</html>

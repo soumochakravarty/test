@@ -1,42 +1,43 @@
 <nav class="cyan darken-3 nav-extended">
-    <div class="nav-wrapper">
-      {{#if (equal session.email "admin@admin.com")}}
-        <a href="/userdetail" class="brand-logo center">Service Call Plus</a>
-        {{else}}
-         <a href="/dashboard" class="brand-logo center"><img class="responsive-img" id="logo" src="../images/Logo.png"/></a>
-      {{/if}}
+  <div class="nav-wrapper">
+    {{#if (equal session.email "admin@admin.com")}}
+    <a href="/userdetail" class="brand-logo center">Service Call Plus</a>
+    {{else}}
+    <a href="/dashboard" class="brand-logo center"><img class="responsive-img" id="logo" src="../images/Logo.png" /></a>
+    {{/if}}
+    {{#if session.email}}
+    <a data-activates="main-menu" class="button-collapse show-on-large"><i class="fa fa-bars"></i></a>
+    {{/if}}
+    <!-- RIGHT NAV -->
+    <ul class="right hide-on-small-only">
       {{#if session.email}}
-       <a data-activates="main-menu" class="button-collapse show-on-large"><i class="fa fa-bars"></i></a>
+      {{#if (equal session.email "admin@admin.com")}}
+      <li><a href="/userdetail">Welcome Admin</a></li>
+      {{else}}
+      <li><a href="/dashboard">Welcome to {{session.restaurant}}</a></li>
       {{/if}}
-      <!-- RIGHT NAV -->
-      <ul class="right hide-on-small-only">
-        {{#if session.email}}
-       {{#if (equal session.email "admin@admin.com")}}
-        <li><a href="/userdetail">Welcome Admin</a></li>
-        {{else}}
-        <li><a href="/dashboard">Welcome to {{session.restaurant}}</a></li>
-        {{/if}}
-        <li><a href="/users/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
-        {{/if}}
+      <li><a href="/users/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+      {{/if}}
 
-      </ul>
-      <!-- SIDE MENU -->
-      <ul class="side-nav cyan darken-3" id="main-menu">
-        <li class="divider"></li>
-        {{#if (equal session.email "admin@admin.com")}}
-    
-        <li><a href="/createuser" ><i class="fa fa-cogs"></i> Creat User </a></li>
-        <li><a href="/restpwd"><i class="fa fa-repeat"></i> Rst Pwd Any User</a></li>
-        <li><a href="/deluser"> <i class="fa fa-trash-o"></i>Delete User </a></li>
-        <li><a href="/updtable"> <i class="fa fa-plus-square"></i>Add/Delete Table </a></li>
-        <li><a href="/devicestp"> <i class="fa fa-cog"></i>Device Setup</a></li>
-        <li><a href="/users/logout"><i class="fa fa-sign-out"></i>Logout </a></li>
-        {{else}}
-        <li><a href="/dashboard" class="white-text"> <i class="fa fa-bar-chart"></i>  Dashboard </a></li>
-        <li><a href="/setup" class="white-text"><i class="fa fa-cog"></i> Setup Tables </a></li>
-        <li><a href="/cancel" class="white-text"><i class="fa fa-ban"></i> Cancel Calls </a></li>
-        <li><a href="/history" class="white-text">Download Records<i class="fa fa-download"></i></a></li>
-        <li class="no-padding">
+    </ul>
+    <!-- SIDE MENU -->
+    <ul class="side-nav cyan darken-3" id="main-menu">
+      <li class="divider"></li>
+      {{#if (equal session.email "admin@admin.com")}}
+
+      <li><a href="/createuser"><i class="fa fa-cogs"></i> Creat User </a></li>
+      <li><a href="/restpwd"><i class="fa fa-repeat"></i> Rst Pwd Any User</a></li>
+      <li><a href="/deluser"> <i class="fa fa-trash-o"></i>Delete User </a></li>
+      <li><a href="/updtable"> <i class="fa fa-plus-square"></i>Add/Delete Table </a></li>
+      <li><a href="/devicestp"> <i class="fa fa-cog"></i>Device Setup</a></li>
+      <li><a href="/users/logout"><i class="fa fa-sign-out"></i>Logout </a></li>
+      {{else}}
+      <li><a href="/dashboard" class="white-text"> <i class="fa fa-bar-chart"></i> Dashboard </a></li>
+      <li><a href="/setup" class="white-text"><i class="fa fa-cog"></i> Setup Tables </a></li>
+      <li><a href="/phone" class="white-text"><i class="fa fa-phone"></i>Phone Notification</a></li>
+      <li><a href="/cancel" class="white-text"><i class="fa fa-ban"></i> Cancel Calls </a></li>
+      <li><a href="/history" class="white-text">Download Records<i class="fa fa-download"></i></a></li>
+      <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
           <li>
             <a class="collapsible-header white-text">Analysis <i class="fa fa-line-chart"></i></a>
@@ -52,9 +53,9 @@
       </li>
       <li><a href="/restpwd" class="white-text"><i class="fa fa-repeat"></i> Change Password </a></li>
       <li><a href="/users/logout" class="white-text"><i class="fa fa-sign-out"></i> Logout </a></li>
-        {{/if}}
-      </ul>
-    </div>
+      {{/if}}
+    </ul>
+  </div>
   <div class="nav-content">
-    </div>
+  </div>
 </nav>
