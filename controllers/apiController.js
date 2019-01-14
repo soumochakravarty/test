@@ -467,6 +467,46 @@ module.exports = function(app) {
               }
             }
           );
+
+          Hoteltoken2.query(
+            "SELECT tid , group_concat(phone separator ',') as phone_number FROM phone WHERE tid=" +
+              tid_tmp +
+              " and restaurant='" +
+              resnm_tmp +
+              "' GROUP BY tid;",
+            function(err, rows) {
+              if (err) throw err;
+              else {
+                var length = rows.length;
+                if (length == 1) {
+                  let transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 465,
+                    secure: true, // use SSL
+                    auth: {
+                      user: user_id_mail, // generated ethereal user
+                      pass: answer_id_mail // generated ethereal password
+                    }
+                  });
+
+                  // setup email data with unicode symbols
+                  let mailOptions = {
+                    from: 'info@servicecallplus.com', // sender address
+                    to: rows[0].phone_number, // list of receivers
+                    //to: 'soumo.chakravarty@gmail.com', // list of receivers
+                    text: 'Table No: ' + tid_tmp + ' Request: ' + req_tmp
+                  };
+
+                  // send mail with defined transport object
+                  transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                      return console.log(error);
+                    }
+                  });
+                }
+              }
+            }
+          );
         }
       }
     );
@@ -1056,33 +1096,49 @@ module.exports = function(app) {
     );
     res.sendStatus(200);
   });
-
-  app.get('/api/batchmail1', function(req, res) {
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true, // use SSL
-      auth: {
-        user: user_id_mail, // generated ethereal user
-        pass: answer_id_mail // generated ethereal password
+  app.post('/phone/delete', function(req, res) {
+    sess = req.session;
+    if (req.body) {
+      for (var table in req.body) {
+        var phone_no = table.substring(0, table.length);
+        Hoteltoken.query(
+          "delete from phone where phone LIKE '%" +
+            phone_no +
+            "%' and restaurant='" +
+            sess.restaurant +
+            "'",
+          function(err, rows) {
+            if (err) throw err;
+          }
+        );
       }
-    });
+    }
+    res.redirect('/phone');
+  });
 
-    // setup email data with unicode symbols
-    let mailOptions = {
-      from: 'info@servicecallplus.com', // sender address
-      to: '9046290057@vtext.com', // list of receivers
-      //to: 'soumo.chakravarty@gmail.com', // list of receivers
-      text: 'How are you?'
-    };
+  app.post('/phone/update', function(req, res) {
+    sess = req.session;
+    var phone_no = req.body.phone + req.body.provider;
 
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return console.log(error);
+    if (req.body) {
+      for (var table in req.body) {
+        var table = table.substring(0, table.length);
+        if (table != 'phone' && table != 'provider') {
+          Hoteltoken.query(
+            "INSERT INTO phone(tid, restaurant, phone) VALUES ('" +
+              table +
+              "','" +
+              sess.restaurant +
+              "','" +
+              phone_no +
+              "')",
+            function(err, rows) {
+              if (err) throw err;
+            }
+          );
+        }
       }
-    });
-    res.sendStatus(200);
+    }
+    res.redirect('/thankyou');
   });
 };
